@@ -1,0 +1,73 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Checks (${{ matrix.os }}, Python ${{ matrix.python }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: windows-latest
+            python: "3.10"
+          - os: windows-latest
+            python: "3.11"
+          - os: ubuntu-latest
+            python: "3.11"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+          cache: pip
+
+      - name: Install CI dependencies
+        run: python -m pip install -r requirements-ci.txt
+
+      - name: Check high-confidence Python errors
+        run: python -m ruff check src scripts ida_modern_ui_loader.py --select E9,F63,F7,F82
+
+      - name: Run offline regression suite
+        env:
+          PYTHONDONTWRITEBYTECODE: "1"
+          QT_QPA_PLATFORM: offscreen
+        run: python scripts/run_checks.py --require-qt
+
+  package:
+    name: Reproducible package
+    needs: checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build release archive
+        run: python scripts/build_release.py
+
+      - name: Upload verified archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: IDAPro-MuiLs
+          path: |
+            dist/*.zip
+            dist/*.sha256
+          if-no-files-found: error

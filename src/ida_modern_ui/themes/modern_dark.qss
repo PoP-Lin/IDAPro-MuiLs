@@ -1,0 +1,1620 @@
+/* Restrained Material-inspired theme. Generic selectors keep plugin panels compatible. */
+QWidget {
+    background-color: #17191f;
+    color: #d8dee9;
+    font-family: "@FONT_FAMILY@";
+    font-size: @FONT_SIZE@;
+    selection-background-color: @ACCENT@;
+    selection-color: #101218;
+}
+QLabel { background: transparent; }
+
+QMainWindow, QDialog { background-color: #17191f; }
+IDAMainWindow { background-color: #17191f; }
+
+QDockWidget {
+    background: #171A20;
+    color: #CBD3DF;
+    border: 0;
+}
+QDockWidget::title {
+    background: #1C2028;
+    border: 0;
+    border-bottom: 1px solid #303744;
+    border-top-left-radius: @SMALL_RADIUS@;
+    border-top-right-radius: @SMALL_RADIUS@;
+    padding: 5px 8px;
+}
+QDockWidget::close-button, QDockWidget::float-button {
+    background: transparent;
+    border: 0;
+    border-radius: @SMALL_RADIUS@;
+    padding: 2px;
+}
+QDockWidget::close-button:hover, QDockWidget::float-button:hover {
+    background: #343B49;
+}
+QDockWidget::close-button:pressed, QDockWidget::float-button:pressed {
+    background: #202731;
+}
+DockWidgetTitle, DockAreaDragTitle {
+    background: #1C222B;
+    color: #CDD5E0;
+    border: 0;
+    border-bottom: 1px solid #2D3744;
+    margin: 0;
+    /* The native title layout already owns vertical margins around its 26px
+       controls. Extra QSS padding made Output/Strings headers 41px tall. */
+    padding: 0 9px;
+}
+/* Keep dock cards visibly rounded without the wide gutters of a full card margin. */
+DockWidgetTitle {
+    border-top-left-radius: @PANEL_RADIUS@;
+    border-top-right-radius: @PANEL_RADIUS@;
+}
+/* The dedicated floating drag title can carry the visible window rounding. */
+DockAreaDragTitle {
+    border-top-left-radius: @PANEL_RADIUS@;
+    border-top-right-radius: @PANEL_RADIUS@;
+}
+DockWidgetTitle[active="true"] {
+    background: #222A35;
+    border-bottom-color: #4A596E;
+}
+DockWidgetTitle QWidget, DockAreaDragTitle QWidget {
+    background: transparent;
+    border: 0;
+}
+DockWidgetTitle > QPushButton, DockAreaDragTitle > QPushButton {
+    background: transparent;
+    border: 0;
+    border-radius: @SMALL_RADIUS@;
+    min-width: 22px;
+    max-width: 22px;
+    min-height: 22px;
+    max-height: 22px;
+    margin: 0;
+    padding: 1px;
+}
+DockWidgetTitle > QPushButton:hover, DockAreaDragTitle > QPushButton:hover {
+    background: #343b49;
+}
+DockWidgetTitle > QPushButton:focus, DockAreaDragTitle > QPushButton:focus {
+    background: #293341;
+    border: 1px solid #52677F;
+}
+DockWidgetTitle > QPushButton:pressed, DockAreaDragTitle > QPushButton:pressed {
+    background: #202731;
+}
+DockWidgetTitle > QPushButton:disabled, DockAreaDragTitle > QPushButton:disabled {
+    background: transparent;
+    border: 0;
+}
+
+QMenuBar { background: #1B1E25; spacing: 1px; border-bottom: 1px solid #272C35; }
+QMenuBar::item { background: transparent; padding: 3px 8px; border-radius: @CONTROL_RADIUS@; }
+QMenuBar::item:selected { background: #2a2f3a; }
+QMenuBar::item:pressed, QMenuBar::item:open { background: #303747; color: #EEF3FA; }
+QMenuBar::item:disabled { color: #687486; background: transparent; }
+QMenu {
+    background: #20242c;
+    border: 1px solid #343a46;
+    border-radius: @SMALL_RADIUS@;
+    padding: 5px;
+}
+QMenu::item { padding: @CONTROL_V@ 26px @CONTROL_V@ @CONTROL_H@; border-radius: @SMALL_RADIUS@; }
+QMenu::item:selected { background: #303747; color: #eef3ff; }
+QMenu::item:disabled { color: #687486; background: transparent; }
+QMenu::item:checked { background: #293342; color: #EEF3FA; }
+QMenu::item:checked:selected { background: #344258; }
+QMenu::item:checked:disabled { background: #222833; color: #687486; }
+QMenu::indicator {
+    width: 14px;
+    height: 14px;
+    margin-left: 5px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+}
+QMenu::indicator:checked {
+    image: url("@CHECK_ON_ICON@");
+    background: @ACCENT@;
+    border-color: @ACCENT@;
+}
+QMenu::indicator:checked:disabled {
+    image: url("@CHECK_ON_ICON@");
+    background: #46515F;
+    border-color: #566270;
+}
+QMenu::separator { height: 1px; background: #353b47; margin: 5px 8px; }
+
+QToolBar {
+    background: #181B21;
+    border: 0;
+    border-bottom: 1px solid #292E38;
+    spacing: 1px;
+    padding: 1px 3px;
+    qproperty-iconSize: 18px 18px;
+}
+QToolBar::handle { image: none; width: 3px; background: transparent; }
+QToolBar::separator { background: #303641; width: 1px; margin: 5px 5px; }
+QToolButton {
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: @CONTROL_RADIUS@;
+    min-width: 22px;
+    min-height: 22px;
+    padding: 2px;
+    margin: 0;
+}
+QToolButton:hover { background: #2b303b; }
+QToolButton:focus { background: #293341; border-color: #52677F; }
+QToolButton:pressed, QToolButton:checked, QToolButton:open {
+    background: #343b49;
+    border-color: #46566A;
+}
+QToolButton:checked:focus, QToolButton:open:focus {
+    background: #344258;
+    border-color: #7890B1;
+}
+QToolButton:checked:pressed, QToolButton:open:pressed {
+    background: #202731;
+    border-color: #52677F;
+}
+QToolButton:disabled { background: transparent; border-color: transparent; color: #687486; }
+
+QPushButton {
+    background: #292f3a;
+    border: 1px solid #3b4351;
+    border-radius: @CONTROL_RADIUS@;
+    padding: @CONTROL_V@ @CONTROL_H@;
+}
+QPushButton:hover { border-color: @ACCENT@; background: #303744; }
+QPushButton:focus { border-color: #52677F; background: #2B3340; }
+QPushButton:pressed { background: #222731; }
+QPushButton:checked { background: #344258; border-color: #52677F; color: #F0F4FA; }
+QPushButton:checked:focus { background: #344258; border-color: #7890B1; color: #F0F4FA; }
+QPushButton:checked:pressed { background: #202731; border-color: #52677F; color: #F0F4FA; }
+QPushButton:disabled { color: #686f7c; background: #20232a; border-color: #2a2e37; }
+
+QLineEdit, QTextEdit, QPlainTextEdit, QSpinBox, QDoubleSpinBox, QComboBox {
+    background: #111319;
+    border: 1px solid #353c48;
+    border-radius: @RADIUS@;
+    padding: @CONTROL_V@ @CONTROL_H@;
+    placeholder-text-color: #7F8B9D;
+}
+QLineEdit:hover, QTextEdit:hover, QPlainTextEdit:hover,
+QSpinBox:hover, QDoubleSpinBox:hover, QComboBox:hover {
+    border-color: #46566A;
+}
+QLineEdit:focus, QTextEdit:focus, QPlainTextEdit:focus,
+QSpinBox:focus, QDoubleSpinBox:focus, QComboBox:focus {
+    background: #111820;
+    border-color: @ACCENT@;
+}
+QLineEdit:read-only, QTextEdit:read-only, QPlainTextEdit:read-only {
+    background: #151920;
+    color: #AAB4C3;
+    border-color: #303844;
+}
+QLineEdit:read-only:hover, QTextEdit:read-only:hover, QPlainTextEdit:read-only:hover {
+    border-color: #3E4958;
+}
+QLineEdit:read-only:focus, QTextEdit:read-only:focus, QPlainTextEdit:read-only:focus {
+    background: #151B23;
+    border-color: #52677F;
+}
+QLineEdit:disabled, QTextEdit:disabled, QPlainTextEdit:disabled,
+QSpinBox:disabled, QDoubleSpinBox:disabled, QComboBox:disabled {
+    background: #151920;
+    color: #687486;
+    border-color: #29313C;
+}
+
+QTabWidget::pane { border: 1px solid #292F3A; border-radius: @CONTROL_RADIUS@; top: -1px; }
+QTabBar { background: #171A20; border: 0; }
+QTabBar::tab {
+    background: #1B1F27;
+    color: #8E98A8;
+    padding: 4px 8px;
+    margin-right: 1px;
+    border: 0;
+    border-top: 2px solid transparent;
+    border-bottom: 1px solid #292F3A;
+    border-top-left-radius: @CONTROL_RADIUS@;
+    border-top-right-radius: @CONTROL_RADIUS@;
+}
+QTabBar::tab:hover { background: #222833; color: #CFD7E3; }
+QTabBar::tab:selected {
+    color: #EEF3FA;
+    border-top-color: @ACCENT@;
+    border-bottom-color: #242A34;
+    background: #242A34;
+}
+QTabBar::tab:pressed { background: #1E2530; color: #E1E7F0; }
+QTabBar::tab:disabled { background: #191D24; color: #606B7A; }
+QTabBar::tab:selected:disabled {
+    background: #20252D;
+    color: #707B89;
+    border-top-color: #46515F;
+    border-bottom-color: #292F3A;
+}
+QTabBar QToolButton { background: #1B1F27; border-radius: @CONTROL_RADIUS@; padding: 2px; }
+QTabBar QToolButton:hover { background: #2B3340; }
+QTabBar QToolButton:focus { background: #293341; border-color: #52677F; }
+QTabBar QToolButton:disabled { background: #191D24; border-color: transparent; }
+QTabBar::close-button {
+    image: url("@CLOSE_ICON@");
+    width: 14px;
+    height: 14px;
+    margin: 1px 2px;
+}
+QTabBar::close-button:hover, QTabBar::close-button:selected:hover {
+    image: url("@CLOSE_HOVER_ICON@");
+    background: #2B3340;
+    border-radius: @SMALL_RADIUS@;
+}
+QTabBar::close-button:pressed, QTabBar::close-button:selected:pressed {
+    image: url("@CLOSE_HOVER_ICON@");
+    background: #1E2530;
+    border-radius: @SMALL_RADIUS@;
+}
+
+QTreeView, QTableView, QListView {
+    background: #14161c;
+    alternate-background-color: #181b22;
+    border: 1px solid #252B35;
+    outline: 0;
+    gridline-color: #272c35;
+}
+QTreeView::item, QTableView::item, QListView::item { padding: @ITEM@; }
+QTreeView::item:hover, QTableView::item:hover, QListView::item:hover { background: #1B2430; }
+QTreeView::item:selected, QTableView::item:selected, QListView::item:selected { background: #35405a; color: #edf3ff; }
+QTreeView::item:selected:!active, QTableView::item:selected:!active,
+QListView::item:selected:!active { background: #2D3749; color: #D8E0EA; }
+QTreeView::item:disabled, QTableView::item:disabled, QListView::item:disabled { color: #687486; }
+QTreeView::branch { background: transparent; }
+QTreeView::branch:closed:has-children { image: url("@CHEVRON_RIGHT_ICON@"); }
+QTreeView::branch:open:has-children { image: url("@CHEVRON_DOWN_ICON@"); }
+QHeaderView::section {
+    background: #1E232C;
+    color: #B8C1CE;
+    border: 0;
+    border-right: 1px solid #2C333E;
+    border-bottom: 1px solid #2C333E;
+    padding: 4px 7px;
+}
+QHeaderView::section:hover { background: #252C37; color: #D7DEE8; }
+QHeaderView::section:pressed { background: #2B3543; }
+QHeaderView::section:disabled { color: #687486; background: #1B2028; }
+QTableCornerButton::section {
+    background: #1E232C;
+    border: 0;
+    border-right: 1px solid #2C333E;
+    border-bottom: 1px solid #2C333E;
+    border-top-left-radius: @CONTROL_RADIUS@;
+}
+QTableCornerButton::section:hover { background: #252C37; }
+QTableCornerButton::section:pressed { background: #2B3543; }
+QTableCornerButton::section:disabled { background: #1B2028; }
+QHeaderView::up-arrow {
+    image: url("@CHEVRON_UP_ICON@");
+    width: 12px;
+    height: 12px;
+}
+QHeaderView::down-arrow {
+    image: url("@CHEVRON_DOWN_ICON@");
+    width: 12px;
+    height: 12px;
+}
+
+/* Keep native scrollbar geometry and plugin-panel hit targets unchanged.
+   IDA-owned views receive the antialiased rounded visual layer from
+   scrollbar_runtime.py; ordinary Qt/plugin scrollbars retain this lightweight
+   fallback style. */
+QScrollBar:vertical { background: transparent; width: 9px; margin: 1px; }
+QScrollBar:horizontal { background: transparent; height: 9px; margin: 1px; }
+QScrollBar::handle { background: #3D4553; border-radius: 4px; min-height: 24px; min-width: 24px; }
+QScrollBar::handle:hover { background: #596273; }
+QScrollBar::handle:pressed { background: #60708A; }
+QScrollBar::handle:disabled { background: #2B333F; }
+QScrollBar::add-line, QScrollBar::sub-line { width: 0; height: 0; }
+QScrollBar::add-page, QScrollBar::sub-page { background: transparent; }
+
+QToolTip { background: #252a33; color: #eef2f7; border: 1px solid #434b59; border-radius: @CONTROL_RADIUS@; padding: 5px; }
+QStatusBar { background: #181B21; border-top: 1px solid #292E38; min-height: 22px; padding: 0 5px; }
+QStatusBar::item { border: 0; }
+/* Keep a generous resize hit target while painting only a restrained 1px seam. */
+QSplitter::handle { background: transparent; }
+QSplitter::handle:horizontal {
+    border-left: 1px solid #2D3440;
+    margin: 0 3px;
+}
+QSplitter::handle:vertical {
+    border-top: 1px solid #2D3440;
+    margin: 3px 0;
+}
+QSplitter::handle:horizontal:hover { border-left-color: #53627A; }
+QSplitter::handle:vertical:hover { border-top-color: #53627A; }
+QSplitter::handle:horizontal:pressed { border-left-color: #7890B1; }
+QSplitter::handle:vertical:pressed { border-top-color: #7890B1; }
+/* Reduce the dark gutter between the editor and the lower panel row without
+   shrinking the native splitter's practical drag target. */
+TopLevelDockArea QSplitter::handle:vertical {
+    height: 6px;
+    margin: 0;
+    background: #17191F;
+    border-top: 1px solid #2D3440;
+}
+TopLevelDockArea QSplitter::handle:vertical:hover {
+    border-top-color: #53627A;
+}
+TopLevelDockArea QSplitter::handle:vertical:pressed {
+    border-top-color: #7890B1;
+}
+
+QGroupBox {
+    border: 1px solid #303641;
+    border-radius: @RADIUS@;
+    margin-top: 10px;
+    padding: 12px 8px 8px 8px;
+    font-weight: 600;
+}
+QGroupBox::title { subcontrol-origin: margin; left: 9px; padding: 0 5px; }
+
+QCheckBox, QRadioButton { spacing: 7px; background: transparent; }
+QCheckBox::indicator, QRadioButton::indicator { width: 16px; height: 16px; }
+QCheckBox::indicator { border: 1px solid #596273; border-radius: 4px; background: #111319; }
+QCheckBox::indicator:hover { border-color: @ACCENT@; }
+QCheckBox::indicator:focus { border-color: #7890B1; }
+QCheckBox::indicator:pressed { background: #202A37; border-color: #7890B1; }
+QCheckBox::indicator:checked {
+    image: url("@CHECK_ON_ICON@");
+    background: @ACCENT@;
+    border-color: @ACCENT@;
+}
+QCheckBox::indicator:indeterminate {
+    background: #52677F;
+    border-color: #7890B1;
+}
+QCheckBox:disabled, QRadioButton:disabled { color: #687486; }
+QCheckBox::indicator:disabled { background: #1B2028; border-color: #343C48; }
+QCheckBox::indicator:checked:disabled { image: url("@CHECK_ON_ICON@"); background: #46566A; }
+QCheckBox::indicator:indeterminate:disabled { background: #343E4B; border-color: #46515F; }
+QCheckBox::indicator:checked:focus { border-color: #A9BEDC; }
+QRadioButton::indicator {
+    image: url("@RADIO_OFF_ICON@");
+    width: 18px;
+    height: 18px;
+    border: 0;
+    background: transparent;
+}
+QRadioButton::indicator:checked { image: url("@RADIO_ON_ICON@"); }
+QRadioButton:focus { color: #F0F4FA; }
+QRadioButton::indicator:hover, QRadioButton::indicator:focus { background: #202733; border-radius: 9px; }
+QRadioButton::indicator:pressed { background: #293546; border-radius: 9px; }
+QRadioButton::indicator:disabled { image: url("@RADIO_OFF_ICON@"); }
+QRadioButton::indicator:checked:disabled { image: url("@RADIO_ON_DISABLED_ICON@"); }
+
+QComboBox::drop-down {
+    border: 0;
+    border-top-right-radius: @CONTROL_RADIUS@;
+    border-bottom-right-radius: @CONTROL_RADIUS@;
+    width: 28px;
+}
+QComboBox:open { background: #141B24; border-color: #52677F; }
+QComboBox::drop-down:hover { background: #222B36; }
+QComboBox::drop-down:pressed, QComboBox::drop-down:open { background: #293546; }
+QComboBox::drop-down:disabled { background: transparent; }
+QComboBox::down-arrow {
+    image: url("@CHEVRON_DOWN_ICON@");
+    width: 14px;
+    height: 14px;
+}
+QComboBox QAbstractItemView {
+    background: #20242c;
+    color: #D8DEE9;
+    border: 1px solid #3b4351;
+    border-radius: @SMALL_RADIUS@;
+    outline: 0;
+    selection-background-color: #35405a;
+    selection-color: #F0F4FA;
+}
+QComboBox QAbstractItemView::item:hover { background: #293342; }
+QComboBox QAbstractItemView::item:selected { background: #35405A; color: #F0F4FA; }
+QComboBox QAbstractItemView::item:disabled { color: #687486; }
+
+/* Composite editors own one outer frame.  Their private line edit remains a
+   text/caret surface and must not inherit a second border or rounded inset. */
+QComboBox > QLineEdit,
+QSpinBox > QLineEdit,
+QDoubleSpinBox > QLineEdit,
+QComboBox > QLineEdit:focus,
+QSpinBox > QLineEdit:focus,
+QDoubleSpinBox > QLineEdit:focus {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    margin: 0;
+    min-height: 0;
+    padding: 0;
+}
+
+/* IDA's compact form fields use an editable QComboBox whose input_field_t is
+   already framed by the combo.  Reset that inner editor so it cannot inherit
+   the generic QLineEdit frame/padding and clip the caret on HiDPI screens. */
+ui_form_dialog_t QComboBox > input_field_t,
+ui_form_dialog_t QComboBox > input_field_t:focus {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    margin: 0;
+    min-height: 0;
+    padding: 0;
+    selection-background-color: #31405A;
+    selection-color: #F0F4FA;
+}
+
+/* G / Jump to address is a small IDA-owned search form.  Keep its address
+   history affordance, but give the single outer field a quieter focus ring and
+   a compact width.  The exact title scope avoids changing plugin dialogs or
+   unrelated IDA forms. */
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > buddy_label_t {
+    color: #CDD6E2;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QComboBox {
+    background: #111820;
+    color: #E0E6EF;
+    border: 1px solid #3B4859;
+    border-radius: @SMALL_RADIUS@;
+    min-width: 213px;
+    max-width: 213px;
+    min-height: 28px;
+    margin-left: 2px;
+    padding: 0 28px 0 9px;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QComboBox:hover {
+    border-color: #46566A;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QComboBox:focus {
+    background: #111922;
+    border-color: #52677F;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QComboBox:open {
+    background: #141B24;
+    border-color: #52677F;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QComboBox:disabled {
+    background: #151920;
+    color: #687486;
+    border-color: #29313C;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QComboBox::drop-down {
+    border: 0;
+    border-top-right-radius: @SMALL_RADIUS@;
+    border-bottom-right-radius: @SMALL_RADIUS@;
+    width: 26px;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QComboBox::drop-down:hover {
+    background: #222B36;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QComboBox::drop-down:pressed,
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QComboBox::drop-down:open {
+    background: #293546;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QComboBox QAbstractItemView {
+    background: #171D26;
+    color: #DCE3EC;
+    border: 1px solid #3B4859;
+    border-radius: @SMALL_RADIUS@;
+    outline: 0;
+    padding: 3px;
+    selection-background-color: #31405A;
+    selection-color: #F0F4FA;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QComboBox QAbstractItemView::item:hover {
+    background: #293342;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QComboBox QAbstractItemView::item:selected {
+    background: #31405A;
+    color: #F0F4FA;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QComboBox QAbstractItemView::item:disabled {
+    color: #687486;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QDialogButtonBox > QPushButton {
+    background: #252C36;
+    border: 1px solid #394554;
+    border-radius: @CONTROL_RADIUS@;
+    min-width: 40px;
+    min-height: 28px;
+    padding: 0 10px;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QDialogButtonBox > QPushButton:hover,
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QDialogButtonBox > QPushButton:focus {
+    background: #2B3541;
+    border-color: #4A5A6C;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QDialogButtonBox > QPushButton:pressed {
+    background: #202731;
+    border-color: #435064;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QDialogButtonBox > QPushButton:disabled {
+    background: #1B2027;
+    border-color: #29313C;
+    color: #687486;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QDialogButtonBox > QPushButton:default {
+    background: #2C3B4E;
+    border-color: #4D627C;
+    color: #EDF3FA;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QDialogButtonBox > QPushButton:default:hover,
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QDialogButtonBox > QPushButton:default:focus {
+    background: #34475D;
+    border-color: #5B718C;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QDialogButtonBox > QPushButton:default:pressed {
+    background: #202B39;
+    border-color: #52677F;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QDialogButtonBox > QPushButton:default:hover:pressed,
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QDialogButtonBox > QPushButton:default:focus:pressed {
+    background: #1D2734;
+    border-color: #5B718C;
+}
+ui_form_dialog_t[windowTitle="Jump to address"] > ida_form_widget_t > QDialogButtonBox > QPushButton:default:disabled {
+    background: #1B2027;
+    border-color: #29313C;
+    color: #687486;
+}
+
+/* Alt+T / Text search uses the same single-field language as Jump while
+   retaining its native option group.  Its unbounded history field otherwise
+   stretches a small dialog to more than 500 logical pixels on HiDPI. */
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > buddy_label_t {
+    color: #CDD6E2;
+}
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QComboBox {
+    background: #111820;
+    color: #E0E6EF;
+    border: 1px solid #3B4859;
+    border-radius: @SMALL_RADIUS@;
+    min-width: 239px;
+    max-width: 239px;
+    min-height: 28px;
+    margin-left: 2px;
+    padding: 0 28px 0 9px;
+}
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QComboBox:hover {
+    border-color: #46566A;
+}
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QComboBox:focus {
+    background: #111922;
+    border-color: #52677F;
+}
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QComboBox:open {
+    background: #141B24;
+    border-color: #52677F;
+}
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QComboBox:disabled {
+    background: #151920;
+    color: #687486;
+    border-color: #29313C;
+}
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QComboBox::drop-down {
+    border: 0;
+    border-top-right-radius: @SMALL_RADIUS@;
+    border-bottom-right-radius: @SMALL_RADIUS@;
+    width: 26px;
+}
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QComboBox::drop-down:hover {
+    background: #222B36;
+}
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QComboBox::drop-down:pressed,
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QComboBox::drop-down:open {
+    background: #293546;
+}
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QComboBox QAbstractItemView {
+    background: #171D26;
+    color: #DCE3EC;
+    border: 1px solid #3B4859;
+    border-radius: @SMALL_RADIUS@;
+    outline: 0;
+    padding: 3px;
+    selection-background-color: #31405A;
+    selection-color: #F0F4FA;
+}
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QGroupBox {
+    background: #151A22;
+    border: 1px solid #303A47;
+    border-radius: @RADIUS@;
+    padding: 12px 4px 10px 4px;
+}
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QDialogButtonBox > QPushButton {
+    background: #252C36;
+    border: 1px solid #394554;
+    border-radius: @CONTROL_RADIUS@;
+    min-width: 40px;
+    min-height: 28px;
+    padding: 0 10px;
+}
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QDialogButtonBox > QPushButton:hover,
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QDialogButtonBox > QPushButton:focus {
+    background: #2B3541;
+    border-color: #4A5A6C;
+}
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QDialogButtonBox > QPushButton:pressed {
+    background: #202731;
+    border-color: #435064;
+}
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QDialogButtonBox > QPushButton:disabled {
+    background: #1B2027;
+    border-color: #29313C;
+    color: #687486;
+}
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QDialogButtonBox > QPushButton:default {
+    background: #2C3B4E;
+    border-color: #4D627C;
+    color: #EDF3FA;
+}
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QDialogButtonBox > QPushButton:default:hover,
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QDialogButtonBox > QPushButton:default:focus {
+    background: #34475D;
+    border-color: #5B718C;
+}
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QDialogButtonBox > QPushButton:default:pressed {
+    background: #202B39;
+    border-color: #52677F;
+}
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QDialogButtonBox > QPushButton:default:hover:pressed,
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QDialogButtonBox > QPushButton:default:focus:pressed {
+    background: #1D2734;
+    border-color: #5B718C;
+}
+ui_form_dialog_t[windowTitle="Text search (slow!)"] > ida_form_widget_t > QDialogButtonBox > QPushButton:default:disabled {
+    background: #1B2027;
+    border-color: #29313C;
+    color: #687486;
+}
+
+QSpinBox::up-button, QDoubleSpinBox::up-button,
+QSpinBox::down-button, QDoubleSpinBox::down-button {
+    width: 25px;
+    background: #171C24;
+    border: 0;
+    border-left: 1px solid #303A48;
+}
+QSpinBox::up-button, QDoubleSpinBox::up-button {
+    subcontrol-origin: border;
+    subcontrol-position: top right;
+    border-top-right-radius: @CONTROL_RADIUS@;
+}
+QSpinBox::down-button, QDoubleSpinBox::down-button {
+    subcontrol-origin: border;
+    subcontrol-position: bottom right;
+    border-top: 1px solid #303A48;
+    border-bottom-right-radius: @CONTROL_RADIUS@;
+}
+QSpinBox::up-button:hover, QDoubleSpinBox::up-button:hover,
+QSpinBox::down-button:hover, QDoubleSpinBox::down-button:hover {
+    background: #252D39;
+}
+QSpinBox::up-button:pressed, QDoubleSpinBox::up-button:pressed,
+QSpinBox::down-button:pressed, QDoubleSpinBox::down-button:pressed {
+    background: #303C4D;
+}
+QSpinBox::up-button:disabled, QDoubleSpinBox::up-button:disabled,
+QSpinBox::down-button:disabled, QDoubleSpinBox::down-button:disabled {
+    background: #171B21;
+    border-left-color: #29313C;
+}
+QSpinBox::up-arrow, QDoubleSpinBox::up-arrow {
+    image: url("@CHEVRON_UP_ICON@");
+    width: 12px;
+    height: 12px;
+}
+QSpinBox::down-arrow, QDoubleSpinBox::down-arrow {
+    image: url("@CHEVRON_DOWN_ICON@");
+    width: 12px;
+    height: 12px;
+}
+
+QProgressBar { background: #252a33; border: 0; border-radius: 4px; text-align: center; min-height: 8px; }
+QProgressBar::chunk { background: @ACCENT@; border-radius: 4px; }
+QProgressBar:disabled { color: #687486; background: #1B2028; }
+QProgressBar::chunk:disabled { background: #46566A; }
+
+QSlider::groove:horizontal {
+    height: 4px;
+    background: #2B3340;
+    border-radius: 2px;
+}
+QSlider::sub-page:horizontal { background: #52677F; border-radius: 2px; }
+QSlider::add-page:horizontal { background: #2B3340; border-radius: 2px; }
+QSlider::handle:horizontal {
+    width: 14px;
+    margin: -5px 0;
+    background: #8AA6CD;
+    border: 1px solid #A9BEDC;
+    border-radius: 7px;
+}
+QSlider::handle:horizontal:hover { background: #A4BBDA; border-color: #C4D2E5; }
+QSlider::handle:horizontal:focus { background: #A4BBDA; border-color: #D0DCEB; }
+QSlider::handle:horizontal:pressed { background: #C1D1E7; border-color: #E1E8F2; }
+QSlider::groove:horizontal:disabled,
+QSlider::add-page:horizontal:disabled { background: #222831; }
+QSlider::sub-page:horizontal:disabled { background: #394452; }
+QSlider::handle:horizontal:disabled { background: #46515F; border-color: #566270; }
+QSlider::groove:vertical {
+    width: 4px;
+    background: #2B3340;
+    border-radius: 2px;
+}
+QSlider::sub-page:vertical { background: #2B3340; border-radius: 2px; }
+QSlider::add-page:vertical { background: #52677F; border-radius: 2px; }
+QSlider::handle:vertical {
+    height: 14px;
+    margin: 0 -5px;
+    background: #8AA6CD;
+    border: 1px solid #A9BEDC;
+    border-radius: 7px;
+}
+QSlider::handle:vertical:hover,
+QSlider::handle:vertical:focus { background: #A4BBDA; border-color: #C4D2E5; }
+QSlider::handle:vertical:pressed { background: #C1D1E7; border-color: #E1E8F2; }
+QSlider::groove:vertical:disabled,
+QSlider::sub-page:vertical:disabled { background: #222831; }
+QSlider::add-page:vertical:disabled { background: #394452; }
+QSlider::handle:vertical:disabled { background: #46515F; border-color: #566270; }
+
+QLabel#ModernUiHint { color: #8f99a8; font-size: 9pt; background: transparent; }
+
+/* IDA's text-based analysis views and common plugin consoles. */
+QPlainTextEdit, QTextEdit {
+    font-family: "@CODE_FONT@";
+}
+
+/* Adaptive Qt plugin panels.  The runtime sets the root property only on a
+   compatible dock-content root (or an explicitly registered widget).  Every
+   control rule also requires a semantic role, keeping this layer away from
+   custom-painted viewers and leaving plugin-owned geometry untouched. */
+QWidget[modernUiPluginPanel="adaptive"] {
+    background: #14171D;
+    color: #D7DEE8;
+}
+QToolBar[modernUiPluginPanel="adaptive"][modernUiPanelRole="toolbar"],
+QWidget[modernUiPluginPanel="adaptive"] QToolBar[modernUiPanelRole="toolbar"] {
+    background: #181E27;
+    border: 0;
+    border-bottom: 1px solid #2D3744;
+    border-radius: @RADIUS@;
+}
+QLineEdit[modernUiPluginPanel="adaptive"][modernUiPanelRole="search"],
+QWidget[modernUiPluginPanel="adaptive"] QLineEdit[modernUiPanelRole="search"] {
+    background: #0F141B;
+    color: #D7DEE8;
+    border-color: #354253;
+    border-radius: @RADIUS@;
+    selection-background-color: @ACCENT@;
+}
+QLineEdit[modernUiPluginPanel="adaptive"][modernUiPanelRole="search"]:focus,
+QWidget[modernUiPluginPanel="adaptive"] QLineEdit[modernUiPanelRole="search"]:focus {
+    background: #101722;
+    border-color: @ACCENT@;
+}
+QLineEdit[modernUiPluginPanel="adaptive"][modernUiPanelRole="search"]:hover,
+QWidget[modernUiPluginPanel="adaptive"] QLineEdit[modernUiPanelRole="search"]:hover {
+    border-color: #46566A;
+}
+QLineEdit[modernUiPluginPanel="adaptive"][modernUiPanelRole="search"]:read-only,
+QWidget[modernUiPluginPanel="adaptive"] QLineEdit[modernUiPanelRole="search"]:read-only {
+    background: #151920;
+    color: #AAB4C3;
+    border-color: #303844;
+}
+QLineEdit[modernUiPluginPanel="adaptive"][modernUiPanelRole="search"]:read-only:focus,
+QWidget[modernUiPluginPanel="adaptive"] QLineEdit[modernUiPanelRole="search"]:read-only:focus {
+    background: #151B23;
+    border-color: #52677F;
+}
+QLineEdit[modernUiPluginPanel="adaptive"][modernUiPanelRole="search"]:disabled,
+QWidget[modernUiPluginPanel="adaptive"] QLineEdit[modernUiPanelRole="search"]:disabled {
+    background: #151920;
+    color: #687486;
+    border-color: #29313C;
+}
+QTreeView[modernUiPluginPanel="adaptive"][modernUiPanelRole="tree"],
+QTableView[modernUiPluginPanel="adaptive"][modernUiPanelRole="table"],
+QListView[modernUiPluginPanel="adaptive"][modernUiPanelRole="list"],
+QWidget[modernUiPluginPanel="adaptive"] QTreeView[modernUiPanelRole="tree"],
+QWidget[modernUiPluginPanel="adaptive"] QTableView[modernUiPanelRole="table"],
+QWidget[modernUiPluginPanel="adaptive"] QListView[modernUiPanelRole="list"] {
+    background: #0F141B;
+    alternate-background-color: #131922;
+    color: #D5DCE6;
+    border: 1px solid #354253;
+    border-radius: @PANEL_RADIUS@;
+    outline: 0;
+    gridline-color: #27313E;
+    selection-background-color: #31405A;
+    selection-color: #F0F4FA;
+}
+QTreeView[modernUiPluginPanel="adaptive"][modernUiPanelRole="tree"] > QWidget#qt_scrollarea_viewport,
+QTableView[modernUiPluginPanel="adaptive"][modernUiPanelRole="table"] > QWidget#qt_scrollarea_viewport,
+QListView[modernUiPluginPanel="adaptive"][modernUiPanelRole="list"] > QWidget#qt_scrollarea_viewport,
+QWidget[modernUiPluginPanel="adaptive"] QTreeView[modernUiPanelRole="tree"] > QWidget#qt_scrollarea_viewport,
+QWidget[modernUiPluginPanel="adaptive"] QTableView[modernUiPanelRole="table"] > QWidget#qt_scrollarea_viewport,
+QWidget[modernUiPluginPanel="adaptive"] QListView[modernUiPanelRole="list"] > QWidget#qt_scrollarea_viewport {
+    background: #0F141B;
+    border: 0;
+    border-radius: @PANEL_INNER_RADIUS@;
+}
+QHeaderView[modernUiPluginPanel="adaptive"][modernUiPanelRole="header"],
+QWidget[modernUiPluginPanel="adaptive"] QHeaderView[modernUiPanelRole="header"] {
+    background: transparent;
+    border: 0;
+}
+QHeaderView[modernUiPluginPanel="adaptive"][modernUiPanelRole="header"]::section,
+QWidget[modernUiPluginPanel="adaptive"] QHeaderView[modernUiPanelRole="header"]::section {
+    background: #1B232D;
+    color: #C1CBD8;
+    border: 0;
+    border-right: 1px solid #2C3744;
+    border-bottom: 1px solid #354253;
+}
+QHeaderView[modernUiPluginPanel="adaptive"][modernUiPanelRole="header"]::section:hover,
+QWidget[modernUiPluginPanel="adaptive"] QHeaderView[modernUiPanelRole="header"]::section:hover {
+    background: #252D38;
+    color: #D8E0EA;
+}
+QHeaderView[modernUiPluginPanel="adaptive"][modernUiPanelRole="header"]::section:pressed,
+QWidget[modernUiPluginPanel="adaptive"] QHeaderView[modernUiPanelRole="header"]::section:pressed {
+    background: #2C3745;
+    color: #EEF3FA;
+}
+QHeaderView[modernUiPluginPanel="adaptive"][modernUiPanelRole="header"]::section:disabled,
+QWidget[modernUiPluginPanel="adaptive"] QHeaderView[modernUiPanelRole="header"]::section:disabled {
+    background: #1A2028;
+    color: #687486;
+}
+QTreeView[modernUiPluginPanel="adaptive"][modernUiPanelRole="tree"]::item:hover,
+QTableView[modernUiPluginPanel="adaptive"][modernUiPanelRole="table"]::item:hover,
+QListView[modernUiPluginPanel="adaptive"][modernUiPanelRole="list"]::item:hover,
+QWidget[modernUiPluginPanel="adaptive"] QTreeView[modernUiPanelRole="tree"]::item:hover,
+QWidget[modernUiPluginPanel="adaptive"] QTableView[modernUiPanelRole="table"]::item:hover,
+QWidget[modernUiPluginPanel="adaptive"] QListView[modernUiPanelRole="list"]::item:hover {
+    background: #1B2430;
+}
+QTreeView[modernUiPluginPanel="adaptive"][modernUiPanelRole="tree"]::item:selected,
+QTableView[modernUiPluginPanel="adaptive"][modernUiPanelRole="table"]::item:selected,
+QListView[modernUiPluginPanel="adaptive"][modernUiPanelRole="list"]::item:selected,
+QWidget[modernUiPluginPanel="adaptive"] QTreeView[modernUiPanelRole="tree"]::item:selected,
+QWidget[modernUiPluginPanel="adaptive"] QTableView[modernUiPanelRole="table"]::item:selected,
+QWidget[modernUiPluginPanel="adaptive"] QListView[modernUiPanelRole="list"]::item:selected {
+    background: #31405A;
+    color: #F0F4FA;
+}
+QTreeView[modernUiPluginPanel="adaptive"][modernUiPanelRole="tree"]::item:selected:!active,
+QTableView[modernUiPluginPanel="adaptive"][modernUiPanelRole="table"]::item:selected:!active,
+QListView[modernUiPluginPanel="adaptive"][modernUiPanelRole="list"]::item:selected:!active,
+QWidget[modernUiPluginPanel="adaptive"] QTreeView[modernUiPanelRole="tree"]::item:selected:!active,
+QWidget[modernUiPluginPanel="adaptive"] QTableView[modernUiPanelRole="table"]::item:selected:!active,
+QWidget[modernUiPluginPanel="adaptive"] QListView[modernUiPanelRole="list"]::item:selected:!active {
+    background: #29364A;
+    color: #D8E0EA;
+}
+QPlainTextEdit[modernUiPluginPanel="adaptive"][modernUiPanelRole="console"],
+QTextEdit[modernUiPluginPanel="adaptive"][modernUiPanelRole="console"],
+QWidget[modernUiPluginPanel="adaptive"] QPlainTextEdit[modernUiPanelRole="console"],
+QWidget[modernUiPluginPanel="adaptive"] QTextEdit[modernUiPanelRole="console"] {
+    background: #0F141B;
+    color: #CBD4E0;
+    border: 1px solid #354253;
+    border-radius: @PANEL_RADIUS@;
+    selection-background-color: #34415B;
+    selection-color: #F1F5FA;
+}
+QPlainTextEdit[modernUiPluginPanel="adaptive"][modernUiPanelRole="console"]:hover,
+QTextEdit[modernUiPluginPanel="adaptive"][modernUiPanelRole="console"]:hover,
+QWidget[modernUiPluginPanel="adaptive"] QPlainTextEdit[modernUiPanelRole="console"]:hover,
+QWidget[modernUiPluginPanel="adaptive"] QTextEdit[modernUiPanelRole="console"]:hover {
+    border-color: #46566A;
+}
+QPlainTextEdit[modernUiPluginPanel="adaptive"][modernUiPanelRole="console"]:focus,
+QTextEdit[modernUiPluginPanel="adaptive"][modernUiPanelRole="console"]:focus,
+QWidget[modernUiPluginPanel="adaptive"] QPlainTextEdit[modernUiPanelRole="console"]:focus,
+QWidget[modernUiPluginPanel="adaptive"] QTextEdit[modernUiPanelRole="console"]:focus {
+    border-color: #50627A;
+}
+QPlainTextEdit[modernUiPluginPanel="adaptive"][modernUiPanelRole="console"]:read-only,
+QTextEdit[modernUiPluginPanel="adaptive"][modernUiPanelRole="console"]:read-only,
+QWidget[modernUiPluginPanel="adaptive"] QPlainTextEdit[modernUiPanelRole="console"]:read-only,
+QWidget[modernUiPluginPanel="adaptive"] QTextEdit[modernUiPanelRole="console"]:read-only {
+    background: #121820;
+    color: #AAB4C3;
+    border-color: #303844;
+}
+QPlainTextEdit[modernUiPluginPanel="adaptive"][modernUiPanelRole="console"]:read-only:focus,
+QTextEdit[modernUiPluginPanel="adaptive"][modernUiPanelRole="console"]:read-only:focus,
+QWidget[modernUiPluginPanel="adaptive"] QPlainTextEdit[modernUiPanelRole="console"]:read-only:focus,
+QWidget[modernUiPluginPanel="adaptive"] QTextEdit[modernUiPanelRole="console"]:read-only:focus {
+    background: #131A23;
+    border-color: #50627A;
+}
+QPlainTextEdit[modernUiPluginPanel="adaptive"][modernUiPanelRole="console"]:disabled,
+QTextEdit[modernUiPluginPanel="adaptive"][modernUiPanelRole="console"]:disabled,
+QWidget[modernUiPluginPanel="adaptive"] QPlainTextEdit[modernUiPanelRole="console"]:disabled,
+QWidget[modernUiPluginPanel="adaptive"] QTextEdit[modernUiPanelRole="console"]:disabled {
+    background: #151920;
+    color: #687486;
+    border-color: #29313C;
+}
+QFrame[modernUiPluginPanel="adaptive"][modernUiPanelRole="surface"],
+QWidget[modernUiPluginPanel="adaptive"] QFrame[modernUiPanelRole="surface"] {
+    background: #0F141B;
+    border: 1px solid #354253;
+    border-radius: @PANEL_RADIUS@;
+}
+QLabel[modernUiPluginPanel="adaptive"][modernUiPanelRole="empty"],
+QWidget[modernUiPluginPanel="adaptive"] QLabel[modernUiPanelRole="empty"] {
+    background: transparent;
+    color: #7F8B9D;
+}
+QLabel[modernUiPluginPanel="adaptive"][modernUiPanelRole="badge"],
+QWidget[modernUiPluginPanel="adaptive"] QLabel[modernUiPanelRole="badge"] {
+    background: #273448;
+    color: #CFE0FA;
+    border: 1px solid #3B4C64;
+    border-radius: @CONTROL_RADIUS@;
+}
+QLabel[modernUiPluginPanel="adaptive"][modernUiPanelRole="muted"],
+QWidget[modernUiPluginPanel="adaptive"] QLabel[modernUiPanelRole="muted"] {
+    background: transparent;
+    color: #8794A6;
+}
+
+/* IDA-specific analysis widgets. These selectors are intentionally scoped. */
+/*
+ * IDA's command line is wrapped in an untitled QGroupBox.  The generic
+ * titled-card rule above otherwise contributes 10px of title margin plus
+ * 12px of top padding, which becomes a conspicuous empty strip on HiDPI
+ * displays.  Keep the override on the exact ConsoleWidget child path so
+ * ordinary dialogs and third-party plugin group boxes retain card spacing.
+ */
+ConsoleWidget > CLIWidget > QGroupBox {
+    border: 0;
+    margin: 0;
+    padding: 4px 8px;
+    font-weight: 400;
+    background: transparent;
+}
+ConsoleWidget > CLIWidget > QGroupBox::title {
+    height: 0;
+    margin: 0;
+    padding: 0;
+}
+ConsoleWidget > CLIWidget QLineEdit {
+    /* Give the command surface one quiet elevation above the log card while
+       keeping the native line-edit geometry untouched. */
+    background: #111822;
+    border: 1px solid #354253;
+    border-radius: @PANEL_RADIUS@;
+    padding: @CONTROL_V@ 9px;
+}
+ConsoleWidget > CLIWidget QLineEdit:focus {
+    background: #101722;
+    border-color: #50627A;
+}
+ConsoleWidget > CLIWidget QPushButton {
+    background: #222B38;
+    color: #CBD7E8;
+    border: 1px solid #3A4759;
+    border-radius: @PANEL_RADIUS@;
+}
+ConsoleWidget > CLIWidget QPushButton:hover {
+    background: #293546;
+    border-color: #50627A;
+}
+ConsoleWidget > CLIWidget QPushButton:focus {
+    border-color: #50627A;
+}
+
+/*
+ * The IDA 9.3 Functions dirtree exposes a visible but intentionally empty
+ * QHeaderView.  Generic header padding expands it to roughly 45-50 physical
+ * pixels at common Windows scaling.  Only collapse that private IDA view;
+ * chooser tables and plugin-owned trees keep their normal column headers.
+ */
+functions_dirtree_widget_t > QHeaderView {
+    min-height: 0;
+    max-height: 0;
+    border: 0;
+}
+functions_dirtree_widget_t > QHeaderView::section {
+    min-height: 0;
+    max-height: 0;
+    padding: 0;
+    border: 0;
+}
+
+/* Functions uses row selection across several model columns.  Keep every
+   selected cell square so the native fill remains one continuous strip.  A
+   local post-paint runtime rounds only the visual beginning/end of each row;
+   this avoids the disconnected first-cell capsule seen in the old QSS rules. */
+functions_dirtree_widget_t {
+    /* Include the decoration/icon column in the same selected strip.  With
+       this enabled the post-paint mask can round one continuous row instead
+       of leaving a darker first-cell block beside the function icon. */
+    show-decoration-selected: 1;
+    /* IDA's private dirtree paints the decoration strip from these
+       properties instead of QTreeView's standard item brush.  Match the
+       selected/default cells so the icon gutter joins the text cell without
+       a dark seam. */
+    qproperty-highlight-bg-default: #0F141B;
+    qproperty-highlight-bg-selected: #31405A;
+}
+functions_dirtree_widget_t::item:selected {
+    background: #31405A;
+    color: #F0F4FA;
+    border-radius: 0;
+}
+
+log_widget_t, log_widget_t[os-dark-theme="true"] {
+    background: #101319;
+    color: #C8D0DC;
+    font-family: "@CODE_FONT@";
+    font-size: 10pt;
+    border: 1px solid #303846;
+    border-radius: @RADIUS@;
+    margin: 6px 8px 4px 8px;
+    padding: 6px 8px;
+    selection-background-color: #34415B;
+    selection-color: #F1F5FA;
+}
+log_widget_t:focus, log_widget_t[os-dark-theme="true"]:focus {
+    border-color: #46546A;
+}
+/* The built-in Output panel receives a slightly deeper, more spacious card.
+   The parent-qualified selector leaves third-party log widgets unchanged. */
+ConsoleWidget > log_widget_t,
+ConsoleWidget > log_widget_t[os-dark-theme="true"] {
+    background: #0F141B;
+    color: #CCD4DF;
+    border: 1px solid #354253;
+    border-radius: @PANEL_RADIUS@;
+    margin: 7px 10px 5px 10px;
+    padding: 7px 9px;
+    selection-background-color: #34415B;
+    selection-color: #F1F5FA;
+}
+ConsoleWidget > log_widget_t:focus,
+ConsoleWidget > log_widget_t[os-dark-theme="true"]:focus {
+    border-color: #50627A;
+}
+log_widget_t QWidget, log_widget_t[os-dark-theme="true"] QWidget {
+    background: transparent;
+    border: 0;
+}
+log_widget_t QScrollBar:vertical,
+log_widget_t[os-dark-theme="true"] QScrollBar:vertical {
+    width: 8px;
+    margin: 2px 1px;
+}
+log_widget_t QScrollBar:horizontal,
+log_widget_t[os-dark-theme="true"] QScrollBar:horizontal {
+    height: 8px;
+    margin: 1px 2px;
+}
+log_widget_t QScrollBar::handle:vertical,
+log_widget_t QScrollBar::handle:horizontal,
+log_widget_t[os-dark-theme="true"] QScrollBar::handle:vertical,
+log_widget_t[os-dark-theme="true"] QScrollBar::handle:horizontal {
+    background-color: #394351;
+    border: 0;
+    border-radius: 5px;
+    margin: 1px;
+}
+log_widget_t QScrollBar::handle:vertical:hover,
+log_widget_t QScrollBar::handle:horizontal:hover,
+log_widget_t[os-dark-theme="true"] QScrollBar::handle:vertical:hover,
+log_widget_t[os-dark-theme="true"] QScrollBar::handle:horizontal:hover {
+    background-color: #526072;
+}
+log_widget_t QScrollBar::handle:vertical:pressed,
+log_widget_t QScrollBar::handle:horizontal:pressed,
+log_widget_t[os-dark-theme="true"] QScrollBar::handle:vertical:pressed,
+log_widget_t[os-dark-theme="true"] QScrollBar::handle:horizontal:pressed {
+    background-color: #60708A;
+}
+log_widget_t QScrollBar::handle:vertical:disabled,
+log_widget_t QScrollBar::handle:horizontal:disabled,
+log_widget_t[os-dark-theme="true"] QScrollBar::handle:vertical:disabled,
+log_widget_t[os-dark-theme="true"] QScrollBar::handle:horizontal:disabled {
+    background-color: #2B333F;
+}
+text_area_t {
+    background: #14161c;
+    qproperty-keyword1-fg: #82AAFF;
+    qproperty-keyword2-fg: #C792EA;
+    qproperty-keyword3-fg: #F78C6C;
+    qproperty-string-fg: #C3E88D;
+    qproperty-comment-fg: #697386;
+    qproperty-preprocessor-fg: #89DDFF;
+    qproperty-user1-fg: #FFCB6B;
+}
+text_area_t QWidget { background: transparent; }
+text_area_t text_area_margin_widget_t {
+    color: #697386;
+    qproperty-header-color: #AAB4C3;
+}
+CustomIDAMemo, viewer_t, chooser_widget_t, standalone_dirtree_widget_t, TChooser {
+    background: #14161c;
+    color: #D8DEE9;
+    border: 0;
+}
+/* Output and Strings form a matched pair of independent inset cards. These
+   selectors remain tied to the built-in #Strings object, so IDAPython Choose
+   windows and third-party tables retain their own geometry and paint path. */
+TChooser#Strings > QSplitter#Strings_splitter,
+chooser_widget_t#Strings > QSplitter#Strings_splitter {
+    background: transparent;
+    border: 0;
+}
+TChooser#Strings > QSplitter#Strings_splitter > tchooser_table_widget_t#Strings,
+chooser_widget_t#Strings > QSplitter#Strings_splitter > chooser_table_widget_t#Strings {
+    background: #0F141B;
+    color: #D7DEE8;
+    border: 1px solid #354253;
+    border-radius: @PANEL_RADIUS@;
+    margin: 7px 10px 4px 10px;
+    padding: 3px;
+}
+TChooser#Strings > QSplitter#Strings_splitter > tchooser_table_widget_t#Strings:focus,
+chooser_widget_t#Strings > QSplitter#Strings_splitter > chooser_table_widget_t#Strings:focus {
+    border-color: #50627A;
+}
+TChooser#Strings tchooser_table_widget_t#Strings > QWidget#qt_scrollarea_viewport,
+chooser_widget_t#Strings chooser_table_widget_t#Strings > QWidget#qt_scrollarea_viewport {
+    background: #0F141B;
+    border: 0;
+    /* Match the inset viewport to the card so the lower corners do not turn
+       square when the native table repaints over the rounded frame. */
+    border-radius: @PANEL_INNER_RADIUS@;
+}
+TChooser#Strings tchooser_table_widget_t#Strings > QHeaderView,
+chooser_widget_t#Strings chooser_table_widget_t#Strings > QHeaderView {
+    background: transparent;
+    border: 0;
+    border-top-left-radius: @PANEL_INNER_RADIUS@;
+    border-top-right-radius: @PANEL_INNER_RADIUS@;
+}
+TChooser#Strings tchooser_table_widget_t#Strings > QHeaderView::section,
+chooser_widget_t#Strings chooser_table_widget_t#Strings > QHeaderView::section {
+    background: #1B232D;
+    color: #C1CBD8;
+    border: 0;
+    border-right: 1px solid #293441;
+    border-bottom: 1px solid #303B49;
+    padding: 4px 8px;
+}
+TChooser#Strings tchooser_table_widget_t#Strings > QHeaderView::section:first,
+chooser_widget_t#Strings chooser_table_widget_t#Strings > QHeaderView::section:first {
+    border-top-left-radius: @PANEL_INNER_RADIUS@;
+}
+TChooser#Strings tchooser_table_widget_t#Strings > QHeaderView::section:last,
+chooser_widget_t#Strings chooser_table_widget_t#Strings > QHeaderView::section:last {
+    border-top-right-radius: @PANEL_INNER_RADIUS@;
+}
+TChooser#Strings tchooser_table_widget_t#Strings > QHeaderView::section:last,
+chooser_widget_t#Strings chooser_table_widget_t#Strings > QHeaderView::section:last {
+    border-right: 0;
+}
+TChooser#Strings tchooser_table_widget_t#Strings > QHeaderView::section:hover,
+chooser_widget_t#Strings chooser_table_widget_t#Strings > QHeaderView::section:hover {
+    background: #252D38;
+    color: #D8E0EA;
+}
+TChooser#Strings tchooser_table_widget_t#Strings > QHeaderView::section:pressed,
+chooser_widget_t#Strings chooser_table_widget_t#Strings > QHeaderView::section:pressed {
+    background: #2C3745;
+    color: #EEF3FA;
+}
+TChooser#Strings tchooser_table_widget_t#Strings > QHeaderView::section:disabled,
+chooser_widget_t#Strings chooser_table_widget_t#Strings > QHeaderView::section:disabled {
+    background: #1A2028;
+    color: #687486;
+}
+TChooser#Strings tchooser_table_widget_t#Strings::item,
+chooser_widget_t#Strings chooser_table_widget_t#Strings::item {
+    border: 0;
+    padding: 3px 7px;
+}
+TChooser#Strings tchooser_table_widget_t#Strings::item:hover,
+chooser_widget_t#Strings chooser_table_widget_t#Strings::item:hover {
+    background: #1B2430;
+}
+TChooser#Strings tchooser_table_widget_t#Strings::item:selected,
+chooser_widget_t#Strings chooser_table_widget_t#Strings::item:selected {
+    background: #31405A;
+    color: #F0F4FA;
+}
+TChooser#Strings tchooser_table_widget_t#Strings::item:selected:!active,
+chooser_widget_t#Strings chooser_table_widget_t#Strings::item:selected:!active {
+    background: #29364A;
+    color: #D8E0EA;
+}
+
+/* Every IDA chooser's native quick filter is one search surface.  The private
+   host classes include Names and plugin-created IDA choosers without matching
+   arbitrary plugin QLineEdits.  Its clear button and input no longer draw two
+   additional overlapping control frames. */
+TChooser > quick_filter_widget_t,
+chooser_widget_t > quick_filter_widget_t {
+    background: #111822;
+    border: 1px solid #354253;
+    border-radius: @RADIUS@;
+    margin: 0 10px 3px 10px;
+}
+TChooser > quick_filter_widget_t:hover,
+chooser_widget_t > quick_filter_widget_t:hover {
+    border-color: #46566A;
+}
+TChooser > quick_filter_widget_t[modernUiQuickFilterFocusWithin="true"],
+chooser_widget_t > quick_filter_widget_t[modernUiQuickFilterFocusWithin="true"] {
+    background: #101722;
+    border-color: #52677F;
+}
+TChooser > quick_filter_widget_t > QPushButton,
+chooser_widget_t > quick_filter_widget_t > QPushButton {
+    background: transparent;
+    border: 0;
+    border-radius: @CONTROL_RADIUS@;
+    margin: 5px 1px;
+    /* Replace IDA's saturated clear glyph while retaining its DPI-aware hit
+       target.  The small inset hover surface reads as an icon button rather
+       than a second half-pill inside the search card. */
+    padding: 0;
+}
+TChooser > quick_filter_widget_t > QPushButton:hover,
+chooser_widget_t > quick_filter_widget_t > QPushButton:hover {
+    background: #2A3543;
+}
+TChooser > quick_filter_widget_t > QPushButton:pressed,
+chooser_widget_t > quick_filter_widget_t > QPushButton:pressed {
+    background: #344256;
+}
+TChooser > quick_filter_widget_t > QPushButton:focus,
+chooser_widget_t > quick_filter_widget_t > QPushButton:focus {
+    background: #293546;
+    border: 1px solid #52677F;
+}
+TChooser > quick_filter_widget_t > QPushButton:disabled,
+chooser_widget_t > quick_filter_widget_t > QPushButton:disabled {
+    background: transparent;
+    border: 0;
+}
+TChooser > quick_filter_widget_t > quick_filter_input_t,
+chooser_widget_t > quick_filter_widget_t > quick_filter_input_t,
+TChooser > quick_filter_widget_t > quick_filter_input_t:focus,
+chooser_widget_t > quick_filter_widget_t > quick_filter_input_t:focus {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    margin: 0;
+    /* IDA already reserves 7 logical px through QLineEdit::textMargins().
+       Remove only the generic QLineEdit's additional left padding.  Retain
+       the density-aware vertical inset so the rounded search card keeps its
+       intended height, plus a quiet right inset for typed filter text. */
+    padding: @CONTROL_V@ 8px @CONTROL_V@ 0;
+}
+TChooser > quick_filter_widget_t > quick_filter_input_t:disabled,
+chooser_widget_t > quick_filter_widget_t > quick_filter_input_t:disabled {
+    color: #687486;
+    placeholder-text-color: #596575;
+}
+TChooser#Strings > QStatusBar,
+chooser_widget_t#Strings > QStatusBar {
+    background: transparent;
+    color: #8794A6;
+    border: 0;
+    border-radius: 0;
+    margin: 0 10px 4px 10px;
+    min-height: 24px;
+    padding: 0 8px;
+}
+TChooser#Strings > QStatusBar::item,
+chooser_widget_t#Strings > QStatusBar::item {
+    border: 0;
+}
+TChooser#Strings > QStatusBar > QLabel,
+chooser_widget_t#Strings > QStatusBar > QLabel {
+    background: transparent;
+    padding-left: 8px;
+}
+
+/* Known built-in project-tree hosts use the same single-outline card and
+   muted footer as Strings.  The private IDA class boundary deliberately keeps
+   these rules away from plugin QTreeViews and custom-painted viewers. */
+standalone_dirtree_widget_host_t {
+    background: #14161C;
+    border: 0;
+}
+standalone_dirtree_widget_host_t > standalone_dirtree_widget_t {
+    background: #0F141B;
+    color: #D7DEE8;
+    border: 1px solid #354253;
+    border-radius: @PANEL_RADIUS@;
+    margin: 7px 10px 4px 10px;
+    padding: 3px;
+    outline: 0;
+}
+standalone_dirtree_widget_host_t > standalone_dirtree_widget_t:focus {
+    border-color: #50627A;
+}
+standalone_dirtree_widget_host_t > standalone_dirtree_widget_t > QWidget#qt_scrollarea_viewport {
+    background: #0F141B;
+    border: 0;
+    border-radius: @PANEL_INNER_RADIUS@;
+}
+standalone_dirtree_widget_host_t > standalone_dirtree_widget_t > QHeaderView {
+    background: transparent;
+    border: 0;
+    border-top-left-radius: @PANEL_INNER_RADIUS@;
+    border-top-right-radius: @PANEL_INNER_RADIUS@;
+}
+standalone_dirtree_widget_host_t > standalone_dirtree_widget_t > QHeaderView::section {
+    background: #1B232D;
+    color: #C1CBD8;
+    border: 0;
+    border-right: 1px solid #293441;
+    border-bottom: 1px solid #303B49;
+}
+standalone_dirtree_widget_host_t > standalone_dirtree_widget_t > QHeaderView::section:first {
+    border-top-left-radius: @PANEL_INNER_RADIUS@;
+}
+standalone_dirtree_widget_host_t > standalone_dirtree_widget_t > QHeaderView::section:last {
+    border-top-right-radius: @PANEL_INNER_RADIUS@;
+}
+standalone_dirtree_widget_host_t > standalone_dirtree_widget_t > QHeaderView::section:last {
+    border-right: 0;
+}
+standalone_dirtree_widget_host_t > quick_filter_widget_t {
+    background: #111822;
+    border: 1px solid #354253;
+    border-radius: @RADIUS@;
+    margin: 0 10px 3px 10px;
+}
+standalone_dirtree_widget_host_t > quick_filter_widget_t:hover {
+    border-color: #46566A;
+}
+standalone_dirtree_widget_host_t > quick_filter_widget_t[modernUiQuickFilterFocusWithin="true"] {
+    background: #101722;
+    border-color: #52677F;
+}
+standalone_dirtree_widget_host_t > quick_filter_widget_t > QPushButton {
+    background: transparent;
+    border: 0;
+    border-radius: @CONTROL_RADIUS@;
+    margin: 5px 1px;
+    /* Preserve the host's DPI-aware width; fixed button geometry can jitter
+       when a dock crosses monitors with different scale factors. */
+    padding: 0;
+}
+standalone_dirtree_widget_host_t > quick_filter_widget_t > QPushButton:hover {
+    background: #2A3543;
+}
+standalone_dirtree_widget_host_t > quick_filter_widget_t > QPushButton:pressed {
+    background: #344256;
+}
+standalone_dirtree_widget_host_t > quick_filter_widget_t > QPushButton:focus {
+    background: #293546;
+    border: 1px solid #52677F;
+}
+standalone_dirtree_widget_host_t > quick_filter_widget_t > QPushButton:disabled {
+    background: transparent;
+    border: 0;
+}
+standalone_dirtree_widget_host_t > quick_filter_widget_t > quick_filter_input_t,
+standalone_dirtree_widget_host_t > quick_filter_widget_t > quick_filter_input_t:focus {
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    margin: 0;
+    /* Match the built-in Strings filter: native textMargins provide the left
+       safety inset, so do not stack the global QLineEdit padding on top. */
+    padding: @CONTROL_V@ 8px @CONTROL_V@ 0;
+}
+standalone_dirtree_widget_host_t > quick_filter_widget_t > quick_filter_input_t:disabled {
+    color: #687486;
+    placeholder-text-color: #596575;
+}
+standalone_dirtree_widget_host_t > QStatusBar {
+    background: transparent;
+    color: #8794A6;
+    border: 0;
+    border-radius: 0;
+    margin: 0 10px 4px 10px;
+    min-height: 24px;
+    padding: 0 8px;
+}
+standalone_dirtree_widget_host_t > QStatusBar::item {
+    border: 0;
+}
+standalone_dirtree_widget_host_t > QStatusBar > QLabel {
+    background: transparent;
+    padding-left: 8px;
+}
+
+/* Keep native scrollbar hit targets intact while reducing the visual weight
+   of the thumbs inside built-in chooser cards. */
+TChooser#Strings tchooser_table_widget_t#Strings QScrollBar::handle:vertical,
+TChooser#Strings tchooser_table_widget_t#Strings QScrollBar::handle:horizontal,
+chooser_widget_t#Strings chooser_table_widget_t#Strings QScrollBar::handle:vertical,
+chooser_widget_t#Strings chooser_table_widget_t#Strings QScrollBar::handle:horizontal,
+standalone_dirtree_widget_host_t > standalone_dirtree_widget_t QScrollBar::handle:vertical,
+standalone_dirtree_widget_host_t > standalone_dirtree_widget_t QScrollBar::handle:horizontal {
+    background-color: #394351;
+    border: 0;
+    border-radius: 5px;
+    margin: 1px;
+}
+TChooser#Strings tchooser_table_widget_t#Strings QScrollBar::add-page,
+TChooser#Strings tchooser_table_widget_t#Strings QScrollBar::sub-page,
+chooser_widget_t#Strings chooser_table_widget_t#Strings QScrollBar::add-page,
+chooser_widget_t#Strings chooser_table_widget_t#Strings QScrollBar::sub-page,
+standalone_dirtree_widget_host_t > standalone_dirtree_widget_t QScrollBar::add-page,
+standalone_dirtree_widget_host_t > standalone_dirtree_widget_t QScrollBar::sub-page {
+    background: transparent;
+}
+TChooser#Strings tchooser_table_widget_t#Strings QScrollBar::handle:vertical:hover,
+TChooser#Strings tchooser_table_widget_t#Strings QScrollBar::handle:horizontal:hover,
+chooser_widget_t#Strings chooser_table_widget_t#Strings QScrollBar::handle:vertical:hover,
+chooser_widget_t#Strings chooser_table_widget_t#Strings QScrollBar::handle:horizontal:hover,
+standalone_dirtree_widget_host_t > standalone_dirtree_widget_t QScrollBar::handle:vertical:hover,
+standalone_dirtree_widget_host_t > standalone_dirtree_widget_t QScrollBar::handle:horizontal:hover {
+    background-color: #526072;
+}
+TChooser#Strings tchooser_table_widget_t#Strings QScrollBar::handle:vertical:pressed,
+TChooser#Strings tchooser_table_widget_t#Strings QScrollBar::handle:horizontal:pressed,
+chooser_widget_t#Strings chooser_table_widget_t#Strings QScrollBar::handle:vertical:pressed,
+chooser_widget_t#Strings chooser_table_widget_t#Strings QScrollBar::handle:horizontal:pressed,
+standalone_dirtree_widget_host_t > standalone_dirtree_widget_t QScrollBar::handle:vertical:pressed,
+standalone_dirtree_widget_host_t > standalone_dirtree_widget_t QScrollBar::handle:horizontal:pressed {
+    background-color: #60708A;
+}
+TChooser#Strings tchooser_table_widget_t#Strings QScrollBar::handle:vertical:disabled,
+TChooser#Strings tchooser_table_widget_t#Strings QScrollBar::handle:horizontal:disabled,
+chooser_widget_t#Strings chooser_table_widget_t#Strings QScrollBar::handle:vertical:disabled,
+chooser_widget_t#Strings chooser_table_widget_t#Strings QScrollBar::handle:horizontal:disabled,
+standalone_dirtree_widget_host_t > standalone_dirtree_widget_t QScrollBar::handle:vertical:disabled,
+standalone_dirtree_widget_host_t > standalone_dirtree_widget_t QScrollBar::handle:horizontal:disabled {
+    background-color: #2B333F;
+}
+viewer_t, viewer_t[os-dark-theme="true"] {
+    qproperty-viewer-bg: #111318;
+    qproperty-node-bg-import: #553C58;
+    qproperty-node-bg-code: #253A59;
+    qproperty-node-bg-data: #294A3A;
+    qproperty-node-bg-default: #303641;
+    qproperty-node-border: #758195;
+    qproperty-node-text: #E2E8F0;
+    qproperty-edge-default: #697386;
+    qproperty-edge-highlighted: #82AAFF;
+}
+viewer_t QWidget, viewer_t[os-dark-theme="true"] QWidget {
+    background: #111318;
+    color: #D8DEE9;
+}
+CustomIDAMemo, CustomIDAMemo[os-dark-theme="true"] {
+    border: 0;
+    qproperty-line-bg-default: #111318;
+    qproperty-line-bg-selected: #34415B;
+    /* IDA's native primary identifier highlight is saturated yellow.  Keep
+       the match cue distinct from row selection while staying in the
+       theme's restrained blue-gray range. */
+    qproperty-line-bg-highlight: #40516B;
+    qproperty-line-fg-default: #C8D0DC;
+    qproperty-line-fg-regular-comment: #7A8495;
+    qproperty-line-fg-repeatable-comment: #8892A3;
+    qproperty-line-fg-automatic-comment: #626C7C;
+    qproperty-line-fg-insn: #D7DEE8;
+    qproperty-line-fg-dummy-data-name: #9FB5D1;
+    qproperty-line-fg-regular-data-name: #A9C1DE;
+    qproperty-line-fg-demangled-name: #82AAFF;
+    qproperty-line-fg-punctuation: #AAB4C3;
+    qproperty-line-fg-charlit-in-insn: #C3E88D;
+    qproperty-line-fg-strlit-in-insn: #C3E88D;
+    qproperty-line-fg-numlit-in-insn: #F78C6C;
+    qproperty-line-fg-void-opnd: #FF6B7A;
+    qproperty-line-fg-code-xref: #89DDFF;
+    qproperty-line-fg-data-xref: #7FDBCA;
+    qproperty-line-fg-code-xref-to-tail: #F78C6C;
+    qproperty-line-fg-data-xref-to-tail: #D5C07B;
+    qproperty-line-fg-error: #FF5370;
+    qproperty-line-fg-line-prefix: #697386;
+    qproperty-line-fg-opcode-byte: #596273;
+    qproperty-line-fg-extra-line: #C792EA;
+    qproperty-line-fg-alt-opnd: #D4A8FF;
+    qproperty-line-fg-hidden: #FFCB6B;
+    qproperty-line-fg-libfunc: #89DDFF;
+    qproperty-line-fg-locvar: #F78C6C;
+    qproperty-line-fg-dummy-code-name: #FFCB6B;
+    qproperty-line-fg-asm-directive: #C3E88D;
+    qproperty-line-fg-macro: #C792EA;
+    qproperty-line-fg-strlit-in-data: #C3E88D;
+    qproperty-line-fg-charlit-in-data: #C3E88D;
+    qproperty-line-fg-numlit-in-data: #F78C6C;
+    qproperty-line-fg-keyword: #C792EA;
+    qproperty-line-fg-register-name: #89DDFF;
+    qproperty-line-fg-import-name: #D4A8FF;
+    qproperty-line-fg-segment-name: #FFCB6B;
+    qproperty-line-fg-dummy-unknown-name: #B2CCD6;
+    qproperty-line-fg-code-name: #82AAFF;
+    qproperty-line-fg-unknown-name: #D4A8FF;
+    qproperty-line-fg-collapsed-line: #FFCB6B;
+    qproperty-caret: #F1F5FA;
+    qproperty-line-pfx-libfunc: #89DDFF;
+    qproperty-line-pfx-func: #697386;
+    qproperty-line-pfx-insn: #D05268;
+    qproperty-line-pfx-data: #7FDBCA;
+    qproperty-line-pfx-unexplored: #B5A45D;
+    qproperty-line-pfx-extern: #C792EA;
+    qproperty-line-pfx-current-line: #FFCB6B;
+    qproperty-line-pfx-current-item: #F78C6C;
+    qproperty-line-pfx-lumina: #73D18B;
+    qproperty-graph-bg-top: #141820;
+    qproperty-graph-bg-bottom: #0F1218;
+    qproperty-graph-node-title-normal: #252B35;
+    qproperty-graph-node-title-selected: #34415B;
+    qproperty-graph-node-title-current: #2D3A4D;
+    qproperty-graph-node-shadow: #0B0D12;
+    qproperty-graph-edge-normal: #697386;
+    qproperty-graph-edge-yes: #73D18B;
+    qproperty-graph-edge-no: #FF6B7A;
+    qproperty-graph-edge-high: #82AAFF;
+    qproperty-graph-edge-selected: #FFCB6B;
+    qproperty-graph-node-frame-selected: #82AAFF;
+}
+GraphMiniView, GraphMiniView[os-dark-theme="true"] {
+    background: #111319;
+    border: 1px solid #292E38;
+    qproperty-fog: rgba(9, 12, 17, 0.42);
+    qproperty-crosshairs: @ACCENT@;
+}
+navband_t, navband_t[os-dark-theme="true"] {
+    background: #111319;
+    /* The native painter fills a square rail.  navband_runtime clips the
+       coloured segments after native paint; these values keep the fallback
+       stylesheet path visually consistent when the overlay is unavailable. */
+    border: 1px solid #303946;
+    border-radius: @SMALL_RADIUS@;
+    qproperty-lib-function: #50A9A8;
+    qproperty-function: #347FB1;
+    qproperty-code: #9D6858;
+    qproperty-data: #818895;
+    qproperty-undefined: #777651;
+    qproperty-extern: #9D619E;
+    qproperty-lumina-function: #469958;
+    qproperty-hl-lib-function: #6FC3C1;
+    qproperty-hl-function: #559AC7;
+    qproperty-hl-code: #BC7B67;
+    qproperty-hl-data: #A2A9B4;
+    qproperty-hl-undefined: #9A9868;
+    qproperty-hl-extern: #BD7DBE;
+    qproperty-hl-lumina-function: #65B975;
+    qproperty-hl-outline: @ACCENT@;
+    qproperty-error: #C9566A;
+    qproperty-gap: #303641;
+    qproperty-cursor: #A8C7FA;
+    qproperty-auto-analysis-cursor: #D8A657;
+}
+/* Only the fixed 15x15 colour chips in navigator_t's legend are rounded.
+   navband_runtime also masks their native square paint; adjacent text labels
+   stay square so their baselines and spacing do not shift on rebuild. */
+ui_label_t[modernUiNavLegendSwatch="true"] {
+    border: 0;
+    border-radius: 4px;
+}
+TCpuRegs { background: #14161c; }
+TCpuRegs ui_label_t { border-radius: 3px; padding: 2px 4px; }

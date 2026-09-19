@@ -1,0 +1,43 @@
+# Python caches and tooling
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+
+# Editors and operating systems
+.idea/
+.vscode/
+*.suo
+*.user
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Build products
+build/
+dist/
+*.zip
+*.sha256
+
+# Local IDA development material. These directories may contain proprietary
+# SDK files, licensed binaries, crash memory, databases, or machine paths.
+.tmp/
+release/
+ida-sdk-*/
+ida-sdk*/
+*.dmp
+*.idb
+*.i64
+*.id0
+*.id1
+*.id2
+*.nam
+*.til
+*.log
+*.reg

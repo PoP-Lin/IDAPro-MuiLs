@@ -1,0 +1,23 @@
+name: Feature request
+description: Suggest a focused visual or compatibility improvement
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Which workflow or surface needs improvement?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: compatibility
+    attributes:
+      label: Plugin compatibility impact
+      description: Note any third-party panel or native IDA behavior involved.
