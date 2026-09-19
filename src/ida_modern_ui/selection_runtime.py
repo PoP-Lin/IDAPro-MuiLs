@@ -790,7 +790,6 @@ class _SelectionEntry:
     local_style: bool = False
     highlight_properties: Optional[Dict[str, Any]] = None
     palette_snapshot: Optional[_PaletteSnapshot] = None
-    viewport_palette_snapshot: Optional[_PaletteSnapshot] = None
 
 
 @dataclass
@@ -1053,18 +1052,11 @@ class _SelectionRuntime(QObject):
                     )
                     if entry.palette_snapshot is None:
                         entry.palette_snapshot = _names_palette_snapshot(tree, kind)
-                    if entry.viewport_palette_snapshot is None:
-                        entry.viewport_palette_snapshot = _names_palette_snapshot(
-                            viewport, kind
-                        )
                     entry.local_style = _with_local_selection_style(tree, kind)
                 _apply_names_highlight_properties(
                     tree, kind, entry.highlight_properties
                 )
                 _apply_names_selection_palette(tree, kind, entry.palette_snapshot)
-                _apply_names_selection_palette(
-                    viewport, kind, entry.viewport_palette_snapshot
-                )
                 self._connect_model_signals(entry)
                 return
             self._detach(key, entry)
@@ -1085,7 +1077,6 @@ class _SelectionRuntime(QObject):
                     _highlight_property_snapshot(tree) if kind == "names" else None
                 ),
                 palette_snapshot=_names_palette_snapshot(tree, kind),
-                viewport_palette_snapshot=_names_palette_snapshot(viewport, kind),
             )
             self._entries[key] = new_entry
             new_entry.local_style = _with_local_selection_style(tree, kind)
@@ -1093,9 +1084,6 @@ class _SelectionRuntime(QObject):
                 tree, kind, new_entry.highlight_properties
             )
             _apply_names_selection_palette(tree, kind, new_entry.palette_snapshot)
-            _apply_names_selection_palette(
-                viewport, kind, new_entry.viewport_palette_snapshot
-            )
 
             def destroyed(
                 _object: Any = None,
@@ -1243,20 +1231,12 @@ class _SelectionRuntime(QObject):
             self._disconnect_connection(entry.destroyed_connection)
         entry.destroyed_connection = None
         current_palette = None
-        current_viewport_palette = None
         if entry.palette_snapshot is not None and _is_valid_qobject(entry.tree):
             try:
                 # Removing the local stylesheet makes Qt rebuild the widget
                 # palette. Preserve the live, pre-removal values so unrelated
                 # roles changed by another plugin remain intact.
                 current_palette = QPalette(entry.tree.palette())
-            except (AttributeError, RuntimeError, TypeError, ValueError):
-                pass
-        if entry.viewport_palette_snapshot is not None and _is_valid_qobject(
-            entry.viewport
-        ):
-            try:
-                current_viewport_palette = QPalette(entry.viewport.palette())
             except (AttributeError, RuntimeError, TypeError, ValueError):
                 pass
         if entry.local_style and _is_valid_qobject(entry.tree):
@@ -1281,18 +1261,9 @@ class _SelectionRuntime(QObject):
             _restore_names_selection_palette(
                 entry.tree, entry.palette_snapshot, current_palette
             )
-        if entry.viewport_palette_snapshot is not None and _is_valid_qobject(
-            entry.viewport
-        ):
-            _restore_names_selection_palette(
-                entry.viewport,
-                entry.viewport_palette_snapshot,
-                current_viewport_palette,
-            )
         entry.local_style = False
         entry.highlight_properties = None
         entry.palette_snapshot = None
-        entry.viewport_palette_snapshot = None
         try:
             entry.filter.release()
         except (AttributeError, RuntimeError, TypeError, ValueError):

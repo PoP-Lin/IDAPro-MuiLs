@@ -177,16 +177,6 @@ def qt_smoke() -> None:
             return int(getter())
         return int(palette.resolve())
 
-    def snapshot_colors(snapshot, role_name):
-        role = palette_enum("ColorRole", role_name)
-        return tuple(
-            snapshot.brushes[(palette_enum("ColorGroup", group), role)]
-            .color()
-            .name()
-            .upper()
-            for group in ("Active", "Disabled", "Inactive")
-        )
-
     class chooser_table_widget_t(QTableView):
         pass
 
@@ -484,14 +474,6 @@ def qt_smoke() -> None:
         raise SystemExit("SELECTION_RUNTIME_FAILED: Names palette bridge missing")
     if names_palette_colors(names_view, "HighlightedText") != ("#F0F4FA",) * 3:
         raise SystemExit("SELECTION_RUNTIME_FAILED: Names text palette bridge missing")
-    if names_palette_colors(names_view.viewport(), "Highlight") != ("#31405A",) * 3:
-        raise SystemExit("SELECTION_RUNTIME_FAILED: Names viewport palette bridge missing")
-    if names_palette_colors(names_view.viewport(), "HighlightedText") != (
-        "#F0F4FA",
-    ) * 3:
-        raise SystemExit(
-            "SELECTION_RUNTIME_FAILED: Names viewport text palette bridge missing"
-        )
     if (
         selection_module._selected_color(names_view, names_view.viewport())
         .name()
@@ -615,16 +597,6 @@ def qt_smoke() -> None:
         raise SystemExit(
             "SELECTION_RUNTIME_FAILED: rebuilt Names text palette bridge missing"
         )
-    if names_palette_colors(names_view.viewport(), "Highlight") != ("#31405A",) * 3:
-        raise SystemExit(
-            "SELECTION_RUNTIME_FAILED: rebuilt Names viewport palette bridge missing"
-        )
-    if names_palette_colors(names_view.viewport(), "HighlightedText") != (
-        "#F0F4FA",
-    ) * 3:
-        raise SystemExit(
-            "SELECTION_RUNTIME_FAILED: rebuilt Names viewport text palette bridge missing"
-        )
 
     names_entry = next(
         entry
@@ -632,22 +604,14 @@ def qt_smoke() -> None:
         if entry.tree is names_view
     )
     palette_snapshot = names_entry.palette_snapshot
-    viewport_palette_snapshot = names_entry.viewport_palette_snapshot
-    if palette_snapshot is None or viewport_palette_snapshot is None:
-        raise SystemExit("SELECTION_RUNTIME_FAILED: Names palette snapshots missing")
+    if palette_snapshot is None:
+        raise SystemExit("SELECTION_RUNTIME_FAILED: Names palette snapshot missing")
     external_palette = QPalette(names_view.palette())
     window_role = palette_enum("ColorRole", "Window")
     external_palette.setColor(window_role, QColor("#ABCDEF"))
     names_view.setPalette(external_palette)
     external_non_owned_mask = (
         palette_resolve_mask(names_view.palette()) & ~palette_snapshot.owned_mask
-    )
-    external_viewport_palette = QPalette(names_view.viewport().palette())
-    external_viewport_palette.setColor(window_role, QColor("#FEDCBA"))
-    names_view.viewport().setPalette(external_viewport_palette)
-    external_viewport_non_owned_mask = (
-        palette_resolve_mask(names_view.viewport().palette())
-        & ~viewport_palette_snapshot.owned_mask
     )
 
     restore_selection_runtime()
@@ -670,39 +634,11 @@ def qt_smoke() -> None:
         raise SystemExit("SELECTION_RUNTIME_FAILED: Names palette rollback missing")
     if names_palette_colors(names_view, "HighlightedText") != ("#C5D4E8",) * 3:
         raise SystemExit("SELECTION_RUNTIME_FAILED: Names text palette rollback missing")
-    restored_viewport_highlight = names_palette_colors(
-        names_view.viewport(), "Highlight"
-    )
-    if restored_viewport_highlight != snapshot_colors(
-        viewport_palette_snapshot, "Highlight"
-    ):
-        raise SystemExit(
-            "SELECTION_RUNTIME_FAILED: Names viewport palette rollback missing "
-            + str(restored_viewport_highlight)
-        )
-    restored_viewport_text = names_palette_colors(
-        names_view.viewport(), "HighlightedText"
-    )
-    if restored_viewport_text != snapshot_colors(
-        viewport_palette_snapshot, "HighlightedText"
-    ):
-        raise SystemExit(
-            "SELECTION_RUNTIME_FAILED: Names viewport text palette rollback missing "
-            + str(restored_viewport_text)
-        )
     restored_window_colors = names_palette_colors(names_view, "Window")
     if restored_window_colors != ("#ABCDEF",) * 3:
         raise SystemExit(
             "SELECTION_RUNTIME_FAILED: unrelated palette role was rolled back "
             + str(restored_window_colors)
-        )
-    restored_viewport_window_colors = names_palette_colors(
-        names_view.viewport(), "Window"
-    )
-    if restored_viewport_window_colors != ("#FEDCBA",) * 3:
-        raise SystemExit(
-            "SELECTION_RUNTIME_FAILED: unrelated viewport palette role was rolled back "
-            + str(restored_viewport_window_colors)
         )
     restored_resolve_mask = palette_resolve_mask(names_view.palette())
     restored_non_owned_mask = restored_resolve_mask & ~palette_snapshot.owned_mask
@@ -712,23 +648,6 @@ def qt_smoke() -> None:
         palette_snapshot.resolve_mask & palette_snapshot.owned_mask
     ):
         raise SystemExit("SELECTION_RUNTIME_FAILED: owned palette mask was not restored")
-    restored_viewport_resolve_mask = palette_resolve_mask(
-        names_view.viewport().palette()
-    )
-    if (
-        restored_viewport_resolve_mask & ~viewport_palette_snapshot.owned_mask
-        != external_viewport_non_owned_mask
-    ):
-        raise SystemExit(
-            "SELECTION_RUNTIME_FAILED: unrelated viewport palette mask was changed"
-        )
-    if restored_viewport_resolve_mask & viewport_palette_snapshot.owned_mask != (
-        viewport_palette_snapshot.resolve_mask
-        & viewport_palette_snapshot.owned_mask
-    ):
-        raise SystemExit(
-            "SELECTION_RUNTIME_FAILED: owned viewport palette mask was not restored"
-        )
     expanded_clean = selection_runtime_diagnostics()
     if expanded_clean.get("target_count") or expanded_clean.get("target_host_count"):
         raise SystemExit(
