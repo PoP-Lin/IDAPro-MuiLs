@@ -93,5 +93,7 @@ Do not infer IDA GUI support from SDK compilation or offline Qt checks alone.
 
 Only update the supported-version tables and publish a new dual-version release
 after both GUI runs pass. Keep the existing `v1.0.0` tag and assets available.
-The development package is version 1.1.0. Its distinct filename preserves the
-existing local 1.0.0 release ZIP.
+The testing package is `1.1.0-beta.1`, published as a GitHub prerelease. Its
+distinct filename preserves the existing 1.0.0 release ZIP. The beta contains
+the runtime exercised by the 9.3 GUI tests with an updated version marker;
+it is available for 9.4 testing, not a claim of completed 9.4 GUI validation.

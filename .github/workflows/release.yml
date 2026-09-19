@@ -33,9 +33,12 @@ jobs:
           QT_QPA_PLATFORM: offscreen
         run: |
           python -m ruff check src scripts ida_modern_ui_loader.py --select E9,F63,F7,F82
+          if ($LASTEXITCODE -ne 0) { throw "Python error checks failed" }
           python scripts/run_checks.py --require-qt
+          if ($LASTEXITCODE -ne 0) { throw "Release regression checks failed" }
           $version = "${{ github.ref_name }}".TrimStart("v")
           python scripts/build_release.py --version $version
+          if ($LASTEXITCODE -ne 0) { throw "Release package build failed" }
 
       - name: Publish GitHub release
         shell: pwsh
@@ -48,7 +51,18 @@ jobs:
           if ($assets.Count -ne 2) {
             throw "Expected one ZIP and one checksum, found $($assets.Count) assets"
           }
-          gh release create "${{ github.ref_name }}" $assets `
-            --verify-tag `
-            --generate-notes `
-            --title "IDAPro-MuiLs ${{ github.ref_name }}"
+          $tag = "${{ github.ref_name }}"
+          $releaseArgs = @("release", "create", $tag) + $assets + @(
+            "--verify-tag", "--title", "IDAPro-MuiLs $tag"
+          )
+          if ($tag.Contains("-")) {
+            $releaseArgs += @("--prerelease", "--latest=false")
+          }
+          $notes = "docs/releases/$tag.md"
+          if (Test-Path -LiteralPath $notes) {
+            $releaseArgs += @("--notes-file", $notes)
+          } else {
+            $releaseArgs += "--generate-notes"
+          }
+          gh @releaseArgs
+          if ($LASTEXITCODE -ne 0) { throw "GitHub release publication failed" }

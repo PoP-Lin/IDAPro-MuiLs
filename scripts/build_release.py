@@ -39,7 +39,11 @@ RELEASE_DOCUMENTS = (
         PurePosixPath("ida_modern_ui/project_docs/docs/images/overview.png"),
     ),
 )
-VERSION_PATTERN = re.compile(r'^__version__\s*=\s*"([0-9]+\.[0-9]+\.[0-9]+)"$', re.MULTILINE)
+VERSION_PATTERN = re.compile(
+    r'^__version__\s*=\s*"([0-9]+\.[0-9]+\.[0-9]+'
+    r'(?:-(?:alpha|beta|rc)\.(?:0|[1-9][0-9]*))?)"$',
+    re.MULTILINE,
+)
 SKIPPED_DIRECTORIES = {"__pycache__"}
 SKIPPED_SUFFIXES = {".pyc", ".pyo"}
 ZIP_TIMESTAMP = (2026, 1, 1, 0, 0, 0)
