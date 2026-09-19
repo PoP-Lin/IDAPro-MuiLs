@@ -72,7 +72,7 @@ def qt_smoke() -> None:
     sys.path.insert(0, str(ROOT / "src"))
     try:
         from PySide6.QtCore import QCoreApplication, QEvent, QItemSelectionModel, QObject, Property
-        from PySide6.QtGui import QColor, QStandardItem, QStandardItemModel
+        from PySide6.QtGui import QColor, QPalette, QStandardItem, QStandardItemModel
         from PySide6.QtWidgets import QApplication, QSplitter, QTableView, QTreeView, QWidget
     except ImportError:
         try:
@@ -83,7 +83,7 @@ def qt_smoke() -> None:
                 QObject,
                 pyqtProperty as Property,
             )
-            from PyQt5.QtGui import QColor, QStandardItem, QStandardItemModel
+            from PyQt5.QtGui import QColor, QPalette, QStandardItem, QStandardItemModel
             from PyQt5.QtWidgets import QApplication, QSplitter, QTableView, QTreeView, QWidget
         except ImportError:
             print("SELECTION_RUNTIME_OK static_only=1")
@@ -126,6 +126,19 @@ def qt_smoke() -> None:
             super().__init__(parent)
             self._highlight_bg_default = QColor("#7A1830")
             self._highlight_bg_selected = QColor("#E45B7A")
+            roles = getattr(QPalette, "ColorRole", QPalette)
+            highlight = getattr(
+                roles, "Highlight", getattr(QPalette, "Highlight", None)
+            )
+            highlighted_text = getattr(
+                roles,
+                "HighlightedText",
+                getattr(QPalette, "HighlightedText", None),
+            )
+            palette = QPalette(self.palette())
+            palette.setColor(highlight, QColor("#6B3F8C"))
+            palette.setColor(highlighted_text, QColor("#C5D4E8"))
+            self.setPalette(palette)
 
         def get_highlight_bg_default(self):
             return QColor(self._highlight_bg_default)
@@ -145,6 +158,23 @@ def qt_smoke() -> None:
         highlight_bg_selected = Property(
             QColor, get_highlight_bg_selected, set_highlight_bg_selected
         )
+
+    def palette_enum(holder_name, member):
+        holder = getattr(QPalette, holder_name, QPalette)
+        return getattr(holder, member, getattr(QPalette, member, None))
+
+    def names_palette_colors(view, role_name):
+        role = palette_enum("ColorRole", role_name)
+        return tuple(
+            view.palette().color(palette_enum("ColorGroup", group), role).name().upper()
+            for group in ("Active", "Disabled", "Inactive")
+        )
+
+    def palette_resolve_mask(palette):
+        getter = getattr(palette, "resolveMask", None)
+        if callable(getter):
+            return int(getter())
+        return int(palette.resolve())
 
     class chooser_table_widget_t(QTableView):
         pass
@@ -414,6 +444,10 @@ def qt_smoke() -> None:
             "SELECTION_RUNTIME_FAILED: Names qproperty colours "
             + str(names_property_colors)
         )
+    if names_palette_colors(names_view, "Highlight") != ("#31405A",) * 3:
+        raise SystemExit("SELECTION_RUNTIME_FAILED: Names palette bridge missing")
+    if names_palette_colors(names_view, "HighlightedText") != ("#F0F4FA",) * 3:
+        raise SystemExit("SELECTION_RUNTIME_FAILED: Names text palette bridge missing")
     if (
         selection_module._selected_color(names_view, names_view.viewport())
         .name()
@@ -529,6 +563,28 @@ def qt_smoke() -> None:
             "SELECTION_RUNTIME_FAILED: rebuilt Names qproperty colours "
             + str(rebuilt_property_colors)
         )
+    if names_palette_colors(names_view, "Highlight") != ("#31405A",) * 3:
+        raise SystemExit("SELECTION_RUNTIME_FAILED: rebuilt Names palette bridge missing")
+    if names_palette_colors(names_view, "HighlightedText") != ("#F0F4FA",) * 3:
+        raise SystemExit(
+            "SELECTION_RUNTIME_FAILED: rebuilt Names text palette bridge missing"
+        )
+
+    names_entry = next(
+        entry
+        for entry in selection_module._RUNTIME._entries.values()
+        if entry.tree is names_view
+    )
+    palette_snapshot = names_entry.palette_snapshot
+    if palette_snapshot is None:
+        raise SystemExit("SELECTION_RUNTIME_FAILED: Names palette snapshot missing")
+    external_palette = QPalette(names_view.palette())
+    window_role = palette_enum("ColorRole", "Window")
+    external_palette.setColor(window_role, QColor("#ABCDEF"))
+    names_view.setPalette(external_palette)
+    external_non_owned_mask = (
+        palette_resolve_mask(names_view.palette()) & ~palette_snapshot.owned_mask
+    )
 
     restore_selection_runtime()
     flush_deletes()
@@ -546,6 +602,24 @@ def qt_smoke() -> None:
             "SELECTION_RUNTIME_FAILED: Names qproperty rollback "
             + str(restored_property_colors)
         )
+    if names_palette_colors(names_view, "Highlight") != ("#6B3F8C",) * 3:
+        raise SystemExit("SELECTION_RUNTIME_FAILED: Names palette rollback missing")
+    if names_palette_colors(names_view, "HighlightedText") != ("#C5D4E8",) * 3:
+        raise SystemExit("SELECTION_RUNTIME_FAILED: Names text palette rollback missing")
+    restored_window_colors = names_palette_colors(names_view, "Window")
+    if restored_window_colors != ("#ABCDEF",) * 3:
+        raise SystemExit(
+            "SELECTION_RUNTIME_FAILED: unrelated palette role was rolled back "
+            + str(restored_window_colors)
+        )
+    restored_resolve_mask = palette_resolve_mask(names_view.palette())
+    restored_non_owned_mask = restored_resolve_mask & ~palette_snapshot.owned_mask
+    if restored_non_owned_mask != external_non_owned_mask:
+        raise SystemExit("SELECTION_RUNTIME_FAILED: unrelated palette mask was changed")
+    if restored_resolve_mask & palette_snapshot.owned_mask != (
+        palette_snapshot.resolve_mask & palette_snapshot.owned_mask
+    ):
+        raise SystemExit("SELECTION_RUNTIME_FAILED: owned palette mask was not restored")
     expanded_clean = selection_runtime_diagnostics()
     if expanded_clean.get("target_count") or expanded_clean.get("target_host_count"):
         raise SystemExit(
