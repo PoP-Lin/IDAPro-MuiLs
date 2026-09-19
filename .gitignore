@@ -31,6 +31,8 @@ dist/
 release/
 ida-sdk-*/
 ida-sdk*/
+# Versioned local SDK bundles used for compatibility preparation.
+/*-SDK/
 *.dmp
 *.idb
 *.i64

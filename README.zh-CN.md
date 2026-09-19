@@ -35,6 +35,9 @@ IDAPro-MuiLs 是面向 IDA Pro 9.3 的现代化桌面主题。项目由 IDAPytho
 当前版本仅面向 Windows 11，原生标题栏与缩放优化使用 Windows DWM API；Linux 与
 macOS 不属于支持目标。安装和开发本插件都不需要 IDA SDK。
 
+正在准备 IDA 9.4 适配，并保留 9.3 支持；9.4 的实际界面验证尚待完成。
+具体流程见[双版本兼容计划](docs/COMPATIBILITY.md)。
+
 ## 安装
 
 ### 使用 GitHub Release

@@ -6,6 +6,18 @@ project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Read-only IDA UI/API inventory collector and a Windows 9.3/9.4 compatibility
+  validation plan. IDA 9.4 GUI support remains pending runtime verification.
+
+### Changed
+
+- Development version is now 1.1.0; the published 1.0.0 release remains available.
+- Use IDA 9.4's optional `UI_Hooks.about_to_exit` event to restore Qt overlays
+  and native hooks before UI destruction. Keep the 9.3 unload path and make
+  cleanup idempotent when early shutdown is followed by plugin unloading.
+
 ## [1.0.0] - 2026-09-19
 
 ### Added

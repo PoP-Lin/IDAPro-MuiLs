@@ -12,7 +12,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "scripts"
-EXPECTED_CHECK_COUNT = 10
+EXPECTED_CHECK_COUNT = 11
 
 
 def parse_args() -> argparse.Namespace:

@@ -31,6 +31,10 @@ RELEASE_DOCUMENTS = (
         PurePosixPath("ida_modern_ui/project_docs/docs/TUTORIAL.md"),
     ),
     (
+        ROOT / "docs" / "COMPATIBILITY.md",
+        PurePosixPath("ida_modern_ui/project_docs/docs/COMPATIBILITY.md"),
+    ),
+    (
         ROOT / "docs" / "images" / "overview.png",
         PurePosixPath("ida_modern_ui/project_docs/docs/images/overview.png"),
     ),

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """IDAPro-MuiLs package."""
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 RUNTIME_BUILD = __version__
 
 

@@ -69,6 +69,12 @@ class _UIHooks(ida_kernwin.UI_Hooks):
     def finish_populating_widget_popup(self, widget, popup, ctx=None):
         self._plugin.on_finish_populating_widget_popup(widget, popup)
 
+    if hasattr(ida_kernwin.UI_Hooks, "about_to_exit"):
+        def about_to_exit(self):
+            # IDA 9.4 emits this while both Qt and IDAPython are still alive.
+            # IDA 9.3 keeps the existing plugin_t.term() cleanup path.
+            self._plugin.term()
+
 
 class ModernUIPlugin(ida_idaapi.plugin_t):
     flags = ida_idaapi.PLUGIN_FIX
@@ -89,6 +95,7 @@ class ModernUIPlugin(ida_idaapi.plugin_t):
         self._desktop_restored = False
         self._layout_migration_origin_version = None
         self._layout_migration_active = False
+        self._terminated = False
 
     def init(self):
         self._ui_hooks = _UIHooks(self)
@@ -108,13 +115,20 @@ class ModernUIPlugin(ida_idaapi.plugin_t):
         self._apply_saved_state()
 
     def term(self):
-        if self._ui_hooks is not None:
-            self._ui_hooks.unhook()
-            self._ui_hooks = None
-        ida_kernwin.detach_action_from_menu("Edit/IDAPro-MuiLs Settings...", ACTION_SETTINGS)
-        ida_kernwin.unregister_action(ACTION_SETTINGS)
-        self._settings_action = None
-        self._theme.restore()
+        # In 9.4 the early UI shutdown callback can precede plugin unloading.
+        # Never restore overlays/native hooks twice or touch Qt again at term.
+        if self._terminated:
+            return
+        self._terminated = True
+        try:
+            if self._ui_hooks is not None:
+                self._ui_hooks.unhook()
+                self._ui_hooks = None
+            ida_kernwin.detach_action_from_menu("Edit/IDAPro-MuiLs Settings...", ACTION_SETTINGS)
+            ida_kernwin.unregister_action(ACTION_SETTINGS)
+            self._settings_action = None
+        finally:
+            self._theme.restore()
 
     def on_ui_ready(self):
         self._layout_gate_open = True

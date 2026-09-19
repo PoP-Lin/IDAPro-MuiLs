@@ -41,6 +41,9 @@ This release targets Windows 11. Its native title-bar and resize integrations
 use Windows DWM APIs; Linux and macOS are not supported targets. The IDA SDK is
 not required to install or develop this plugin.
 
+IDA 9.4 support is being prepared while retaining 9.3 support. GUI validation
+for 9.4 is pending; see the [compatibility plan](docs/COMPATIBILITY.md).
+
 ## Installation
 
 ### GitHub release
