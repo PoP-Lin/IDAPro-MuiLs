@@ -30,12 +30,10 @@ IDAPro-MuiLs 是面向 IDA Pro 9.3 的现代化桌面主题。项目由 IDAPytho
 | IDA Pro | 9.3 |
 | IDAPython | Python 3.10 或 3.11 |
 | Qt 绑定 | PySide6 / Qt 6 |
-| 目标系统 | Windows 11 与 macOS |
-| 完整 IDA 验证 | Windows 11，包含 150% 显示缩放 |
+| 支持系统 | Windows 11，包含 150% 显示缩放 |
 
-在 macOS 上，Qt 主题使用系统标准窗口外观，并跳过 Windows 专属 DWM 效果。
-自动化 Qt 检查覆盖两个目标系统；完整的 IDA 交互验证目前在 Windows 11 上执行。
-Linux 不属于支持目标。安装和开发本插件都不需要 IDA SDK。
+当前版本仅面向 Windows 11，原生标题栏与缩放优化使用 Windows DWM API；Linux 与
+macOS 不属于支持目标。安装和开发本插件都不需要 IDA SDK。
 
 ## 安装
 
@@ -128,8 +126,8 @@ python scripts/build_release.py
 ```
 
 构建命令会在 `dist/` 中生成可复现的 ZIP 和 SHA256 文件。GitHub Actions 会在
-Windows Python 3.10/3.11 以及 macOS Python 3.11 上运行检查；推送 `v1.0.0`
-格式的标签后，会自动构建并发布对应版本。
+Windows Python 3.10/3.11 上运行检查；推送 `v1.0.0` 格式的标签后，会自动构建并
+发布对应版本。
 
 详细贡献要求见 [CONTRIBUTING.md](CONTRIBUTING.md)。
 完整英文教程见 [docs/TUTORIAL.md](docs/TUTORIAL.md)。
