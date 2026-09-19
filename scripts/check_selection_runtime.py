@@ -39,8 +39,10 @@ def static_checks() -> None:
         "pending_host_count",
         "target_host_count",
         "_LOCAL_STYLE_BEGIN",
-        "qproperty-highlight-bg-default",
-        "qproperty-highlight-bg-selected",
+        "_NAMES_HIGHLIGHT_COLORS",
+        "_apply_names_highlight_properties",
+        "qproperty-highlight_bg_default",
+        "qproperty-highlight_bg_selected",
         "apply_selection_runtime",
         "restore_selection_runtime",
     )
@@ -54,6 +56,14 @@ def static_checks() -> None:
         raise SystemExit("SELECTION_RUNTIME_FAILED: cell-level first radius remains")
     if "functions_dirtree_widget_t::item:selected:last" in qss:
         raise SystemExit("SELECTION_RUNTIME_FAILED: cell-level last radius remains")
+    for token in (
+        "qproperty-highlight_bg_default",
+        "qproperty-highlight_bg_selected",
+    ):
+        if token not in qss:
+            raise SystemExit("SELECTION_RUNTIME_FAILED: missing QSS token " + token)
+    if "qproperty-highlight-bg-" in qss:
+        raise SystemExit("SELECTION_RUNTIME_FAILED: malformed QSS qproperty name")
     py_compile.compile(str(SOURCE), doraise=True)
 
 

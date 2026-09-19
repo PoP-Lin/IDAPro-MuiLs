@@ -55,17 +55,17 @@ _NAMES_HIGHLIGHT_COLORS = {
     "highlight_bg_selected": "#31405A",
 }
 _NAMES_LOCAL_STYLE = """
-names_dirtree_widget_t {
+QTreeView {
     show-decoration-selected: 1;
-    qproperty-highlight-bg-default: #0F141B;
-    qproperty-highlight-bg-selected: #31405A;
+    qproperty-highlight_bg_default: #0F141B;
+    qproperty-highlight_bg_selected: #31405A;
 }
-names_dirtree_widget_t::item:selected {
+QTreeView::item:selected {
     background: #31405A;
     color: #F0F4FA;
     border-radius: 0;
 }
-names_dirtree_widget_t::item:selected:!active {
+QTreeView::item:selected:!active {
     background: #31405A;
     color: #D8E0EA;
 }

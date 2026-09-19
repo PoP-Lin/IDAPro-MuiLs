@@ -1051,8 +1051,8 @@ functions_dirtree_widget_t {
        properties instead of QTreeView's standard item brush.  Match the
        selected/default cells so the icon gutter joins the text cell without
        a dark seam. */
-    qproperty-highlight-bg-default: #0F141B;
-    qproperty-highlight-bg-selected: #31405A;
+    qproperty-highlight_bg_default: #0F141B;
+    qproperty-highlight_bg_selected: #31405A;
 }
 functions_dirtree_widget_t::item:selected {
     background: #31405A;
