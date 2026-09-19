@@ -1,5 +1,11 @@
 blank_issues_enabled: false
 contact_links:
+  - name: Installation and usage / 安装与使用
+    url: https://github.com/PoP-Lin/IDAPro-MuiLs/blob/main/docs/TUTORIAL.md
+    about: Read the English tutorial for installation, settings, and plugin-panel integration.
+  - name: Latest release / 最新版本
+    url: https://github.com/PoP-Lin/IDAPro-MuiLs/releases/latest
+    about: Download the latest Windows plugin ZIP and checksum.
   - name: Private security report
     url: https://github.com/PoP-Lin/IDAPro-MuiLs/security/advisories/new
     about: Report vulnerabilities without exposing details publicly.

@@ -1,8 +1,11 @@
-name: Feature request
-description: Suggest a focused visual or compatibility improvement
+name: Feature request / 改进建议
+description: Suggest a Windows UI or plugin-panel improvement / 提出界面或插件面板改进建议
 title: "[Feature]: "
 labels: [enhancement]
 body:
+  - type: markdown
+    attributes:
+      value: English or Chinese suggestions are welcome. This project targets IDA Pro 9.3 on Windows 11.
   - type: textarea
     id: problem
     attributes:
@@ -16,6 +19,11 @@ body:
       label: Proposed behavior
     validations:
       required: true
+  - type: textarea
+    id: references
+    attributes:
+      label: Screenshots or references / 截图或参考设计
+      description: Show the affected panel and the desired result. Hide private content first.
   - type: textarea
     id: compatibility
     attributes:

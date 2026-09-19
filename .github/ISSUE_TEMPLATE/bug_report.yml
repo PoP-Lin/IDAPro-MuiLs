@@ -1,11 +1,13 @@
-name: Bug report
-description: Report a reproducible problem with IDAPro-MuiLs
+name: Bug report / 问题反馈
+description: Report a Windows UI, interaction, or startup problem / 反馈界面、交互或启动问题
 title: "[Bug]: "
 labels: [bug]
 body:
   - type: markdown
     attributes:
-      value: Remove private database contents, licensed binaries, and credentials from attachments.
+      value: |
+        English or Chinese reports are welcome. This project targets IDA Pro 9.3 on Windows 11.
+        Remove private database contents, licensed binaries, and credentials from attachments.
   - type: input
     id: version
     attributes:
@@ -14,10 +16,31 @@ body:
     validations:
       required: true
   - type: input
-    id: environment
+    id: ida_version
     attributes:
-      label: Environment
-      placeholder: IDA 9.3, Windows 11, 150% scaling
+      label: IDA version / IDA 版本
+      placeholder: IDA Pro 9.3
+    validations:
+      required: true
+  - type: input
+    id: windows_version
+    attributes:
+      label: Windows version / Windows 版本
+      placeholder: Windows 11 24H2
+    validations:
+      required: true
+  - type: input
+    id: display
+    attributes:
+      label: Display scaling and resolution / 缩放与分辨率
+      placeholder: 150%, 2560 x 1440; note different scaling on multiple monitors
+    validations:
+      required: true
+  - type: input
+    id: surface
+    attributes:
+      label: Affected panel or dialog / 受影响的面板或对话框
+      placeholder: Functions, Strings, Output, G jump dialog, or a plugin panel
     validations:
       required: true
   - type: textarea
@@ -40,8 +63,18 @@ body:
     validations:
       required: true
   - type: textarea
+    id: plugins
+    attributes:
+      label: Other plugins and theme settings / 其他插件与主题设置
+      description: List relevant plugins, shortcut conflicts, and non-default font, density, or radius settings.
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots / 截图
+      description: Attach a full-window screenshot and a close-up if useful. Hide private content first.
+  - type: textarea
     id: logs
     attributes:
       label: Sanitized diagnostics
-      description: Paste relevant startup.log lines or attach a sanitized screenshot.
+      description: Paste relevant startup.log lines or the Python traceback, with private content removed.
       render: text
