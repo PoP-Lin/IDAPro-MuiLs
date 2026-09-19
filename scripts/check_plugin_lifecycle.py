@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import importlib.util
+from contextlib import contextmanager
 from pathlib import Path
 import sys
 import tempfile
@@ -13,6 +14,24 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
+
+
+@contextmanager
+def stub_ida_modules(modules):
+    # patch.dict(sys.modules, ...) also removes modules imported in its scope.
+    # Unloading/reimporting PySide6 extensions breaks Qt types on PySide 6.8.
+    # Restore only the IDA stubs; leave Qt's native module lifetime intact.
+    missing = object()
+    original = {name: sys.modules.get(name, missing) for name in modules}
+    sys.modules.update(modules)
+    try:
+        yield
+    finally:
+        for name, value in original.items():
+            if value is missing:
+                sys.modules.pop(name, None)
+            else:
+                sys.modules[name] = value
 
 
 def check_lifecycle(early_exit, action_cleanup_fails=False):
@@ -66,7 +85,7 @@ def check_lifecycle(early_exit, action_cleanup_fails=False):
     with tempfile.TemporaryDirectory() as user_dir:
         diskio.get_user_idadir = lambda: user_dir
         modules = {"ida_kernwin": kernwin, "ida_idaapi": idaapi, "ida_diskio": diskio}
-        with patch.dict(sys.modules, modules):
+        with stub_ida_modules(modules):
             spec = importlib.util.spec_from_file_location(
                 "ida_modern_ui._lifecycle_check", ROOT / "src/ida_modern_ui/plugin.py"
             )

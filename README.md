@@ -41,7 +41,7 @@ This release targets Windows 11. Its native title-bar and resize integrations
 use Windows DWM APIs; Linux and macOS are not supported targets. The IDA SDK is
 not required to install or develop this plugin.
 
-The [v1.1.0-beta.1 prerelease](https://github.com/PoP-Lin/IDAPro-MuiLs/releases/tag/v1.1.0-beta.1)
+The [v1.1.0-beta.2 prerelease](https://github.com/PoP-Lin/IDAPro-MuiLs/releases/tag/v1.1.0-beta.2)
 prepares IDA 9.4 support while retaining 9.3 support. GUI validation for 9.4 is
 pending; see the [compatibility plan](docs/COMPATIBILITY.md).
 
@@ -54,7 +54,7 @@ pending; see the [compatibility plan](docs/COMPATIBILITY.md).
 3. Extract the archive directly into IDA's `plugins` directory.
 4. Start IDA.
 
-To test the beta, download `IDAPro-MuiLs-v1.1.0-beta.1.zip` from the prerelease
+To test the beta, download `IDAPro-MuiLs-v1.1.0-beta.2.zip` from the prerelease
 page and use the same installation steps. Keep a copy of the current plugin
 folder and loader before replacement. To roll back, close IDA, replace both
 with that saved pair, and restart. The latest stable release remains v1.0.0.
