@@ -21,7 +21,7 @@ jobs:
             python: "3.10"
           - os: windows-latest
             python: "3.11"
-          - os: ubuntu-latest
+          - os: macos-latest
             python: "3.11"
 
     steps:
@@ -33,12 +33,6 @@ jobs:
         with:
           python-version: ${{ matrix.python }}
           cache: pip
-
-      - name: Install Linux Qt runtime dependencies
-        if: runner.os == 'Linux'
-        run: |
-          sudo apt-get update
-          sudo apt-get install --yes libegl1 libxkbcommon-x11-0 libxcb-cursor0
 
       - name: Install CI dependencies
         run: python -m pip install -r requirements-ci.txt
@@ -55,7 +49,7 @@ jobs:
   package:
     name: Reproducible package
     needs: checks
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
       - name: Check out repository

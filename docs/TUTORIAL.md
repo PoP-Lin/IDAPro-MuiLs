@@ -6,8 +6,8 @@ integration, maintenance, and development for IDAPro-MuiLs 1.0.0.
 ## 1. Requirements
 
 - IDA Pro 9.3 with IDAPython and PySide6 enabled.
-- Windows 11 for the fully validated experience. The Qt theme can run without
-  Windows-only DWM effects, but other platforms have less interaction coverage.
+- Windows 11 or macOS. Windows 11 has full interactive IDA validation; macOS
+  uses standard Qt window chrome and skips the Windows-only DWM effects.
 - Permission to write to IDA's `plugins` directory.
 
 The IDA SDK is not required.

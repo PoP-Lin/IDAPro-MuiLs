@@ -35,12 +35,14 @@ third-party plugin panels keep their native behavior.
 | IDA Pro | 9.3 |
 | IDAPython | Python 3.10 or 3.11 |
 | Qt binding | PySide6 / Qt 6 |
-| Tested OS | Windows 11, including 150% display scaling |
+| Target OS | Windows 11 and macOS |
+| Full IDA validation | Windows 11, including 150% display scaling |
 
-The Qt theme is designed to degrade cleanly when Windows-only DWM integration is
-not available. Older IDA releases and other operating systems have not received
-the same full interaction validation. The IDA SDK is not required to install or
-develop this plugin.
+On macOS, the Qt theme uses the platform's standard window chrome and skips the
+Windows-only DWM effects. Automated Qt checks cover both target OS families;
+full interactive IDA validation is currently performed on Windows 11. Linux is
+not a supported target. The IDA SDK is not required to install or develop this
+plugin.
 
 ## Installation
 
@@ -140,9 +142,9 @@ python scripts/build_release.py
 ```
 
 The build command creates a reproducible ZIP and SHA256 file under `dist/`.
-GitHub Actions runs the checks on Windows with Python 3.10 and 3.11, plus an
-Ubuntu Python 3.11 fallback pass. A `v1.0.0` tag builds and publishes the matching
-release automatically.
+GitHub Actions runs the checks on Windows with Python 3.10 and 3.11, plus macOS
+with Python 3.11. A `v1.0.0` tag builds and publishes the matching release
+automatically.
 
 ## Repository layout
 
