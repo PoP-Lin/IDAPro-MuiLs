@@ -8,6 +8,7 @@ import os
 import py_compile
 import sys
 import warnings
+from collections import Counter
 from pathlib import Path
 
 
@@ -229,6 +230,31 @@ def qt_smoke() -> None:
         device_x = max(0, min(image.width() - 1, int(round(float(x) * scale))))
         device_y = max(0, min(image.height() - 1, int(round(float(y) * scale))))
         return image.pixelColor(device_x, device_y)
+
+    def selected_row_fill(image, scale, view, index):
+        """Find the dominant interior color without assuming platform font metrics."""
+
+        colors = []
+        model = view.model()
+        parent = index.parent()
+        for column in range(model.columnCount(parent)):
+            rect = view.visualRect(model.index(index.row(), column, parent))
+            if not rect.isValid():
+                continue
+            left = max(0, rect.left() + 2)
+            right = max(left, rect.right() - 2)
+            for y in (
+                max(rect.top() + 2, rect.center().y() - 3),
+                rect.center().y(),
+                min(rect.bottom() - 2, rect.center().y() + 3),
+            ):
+                colors.extend(
+                    logical_pixel(image, scale, x, y).name().upper()
+                    for x in range(left, right + 1, 3)
+                )
+        if not colors:
+            raise SystemExit("SELECTION_RUNTIME_FAILED: selected row had no pixels")
+        return Counter(colors).most_common(1)[0][0]
 
     def make_tree(parent=None, rows=3, columns=2):
         candidate = functions_dirtree_widget_t(parent)
@@ -483,28 +509,30 @@ def qt_smoke() -> None:
     ):
         image, image_scale = grab_viewport(view)
         rect = view.visualRect(index)
-        center = logical_pixel(
-            image, image_scale, max(1, rect.left() + 8), rect.center().y()
-        ).name().upper()
+        row_fill = selected_row_fill(image, image_scale, view, index)
         corner = logical_pixel(
             image, image_scale, max(0, rect.left()), max(0, rect.top())
         ).name().upper()
-        if center == corner:
+        if row_fill == corner:
             raise SystemExit(
                 f"SELECTION_RUNTIME_FAILED: {label} outer corner was not masked"
             )
         if label == "Names":
+            if row_fill != "#31405A":
+                raise SystemExit(
+                    "SELECTION_RUNTIME_FAILED: Names selected row fill " + row_fill
+                )
             gutter_points = [x for x in (2, 8, 17) if x < rect.left()]
             gutter_colors = [
                 logical_pixel(image, image_scale, x, rect.center().y()).name().upper()
                 for x in gutter_points
             ]
-            if not gutter_colors or any(color != center for color in gutter_colors):
+            if not gutter_colors or any(color != row_fill for color in gutter_colors):
                 raise SystemExit(
                     "SELECTION_RUNTIME_FAILED: Names left gutter discontinuity "
                     + str(list(zip(gutter_points, gutter_colors)))
-                    + " center="
-                    + center
+                    + " fill="
+                    + row_fill
                 )
 
     # Move focus away from Names and sample only decoration/cell boundaries,
