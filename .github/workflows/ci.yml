@@ -64,7 +64,7 @@ jobs:
         run: python scripts/build_release.py
 
       - name: Upload verified archive
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: IDAPro-MuiLs
           path: |
