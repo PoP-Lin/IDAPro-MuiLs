@@ -11,6 +11,9 @@ integration, maintenance, and development for IDAPro-MuiLs 1.0.0.
 
 The IDA SDK is not required.
 
+If another plugin also registers `Ctrl+Alt+M`, toggle this theme through
+`Edit > Plugins > IDAPro-MuiLs: Toggle`, or assign it a separate shortcut in IDA.
+
 ## 2. Install a release
 
 1. Close every IDA process.

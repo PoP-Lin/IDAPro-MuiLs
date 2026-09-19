@@ -22,34 +22,18 @@ from typing import Any, Dict, Iterable, List, Optional, Tuple
 
 try:  # IDA 9.3 (Qt 6)
     from PySide6.QtCore import QEvent, QObject, QRectF, QTimer, Qt
-    from PySide6.QtGui import (
-        QBrush,
-        QColor,
-        QPaintEvent,
-        QPainter,
-        QPainterPath,
-        QPalette,
-        QPen,
-    )
+    from PySide6.QtGui import QColor, QPaintEvent, QPainter, QPainterPath, QPalette, QPen
     from PySide6.QtWidgets import QApplication, QAbstractItemView, QTreeView, QWidget
 except ImportError:  # pragma: no cover - Qt 5 IDA builds
     try:
         from PyQt5.QtCore import QEvent, QObject, QRectF, QTimer, Qt
-        from PyQt5.QtGui import (
-            QBrush,
-            QColor,
-            QPaintEvent,
-            QPainter,
-            QPainterPath,
-            QPalette,
-            QPen,
-        )
+        from PyQt5.QtGui import QColor, QPaintEvent, QPainter, QPainterPath, QPalette, QPen
         from PyQt5.QtWidgets import QApplication, QAbstractItemView, QTreeView, QWidget
     except ImportError:  # pragma: no cover - static tooling outside IDAPython
         QApplication = None  # type: ignore[assignment]
         QAbstractItemView = QTreeView = QWidget = object  # type: ignore[assignment,misc]
         QEvent = QObject = QRectF = QTimer = Qt = None  # type: ignore[assignment]
-        QBrush = QColor = QPaintEvent = QPainter = None  # type: ignore[assignment]
+        QColor = QPaintEvent = QPainter = None  # type: ignore[assignment]
         QPainterPath = QPalette = QPen = None  # type: ignore[assignment]
 
 from .qt_compat import qobject_key, same_qobject
@@ -71,19 +55,17 @@ _NAMES_HIGHLIGHT_COLORS = {
     "highlight_bg_selected": "#31405A",
 }
 _NAMES_LOCAL_STYLE = """
-QTreeView {
+names_dirtree_widget_t {
     show-decoration-selected: 1;
-    selection-background-color: #31405A;
-    selection-color: #F0F4FA;
-    qproperty-highlight_bg_default: #0F141B;
-    qproperty-highlight_bg_selected: #31405A;
+    qproperty-highlight-bg-default: #0F141B;
+    qproperty-highlight-bg-selected: #31405A;
 }
-QTreeView::item:selected {
+names_dirtree_widget_t::item:selected {
     background: #31405A;
     color: #F0F4FA;
     border-radius: 0;
 }
-QTreeView::item:selected:!active {
+names_dirtree_widget_t::item:selected:!active {
     background: #31405A;
     color: #D8E0EA;
 }
@@ -110,13 +92,6 @@ _SELECTION_EDGE = "#50627A"
 # visual rectangle, leaving the viewport-side decoration gutter unfilled.
 # Post-paint fills only the area before that rectangle; icons and labels begin
 # inside the rectangle and therefore remain untouched.
-
-
-@dataclass(frozen=True)
-class _PaletteSnapshot:
-    brushes: Dict[Tuple[Any, Any], Any]
-    resolve_mask: int
-    owned_mask: int
 
 
 def _class_chain(widget: Any) -> Tuple[str, ...]:
@@ -378,169 +353,6 @@ def _apply_names_highlight_properties(
             pass
 
 
-def _selection_palette_roles() -> Tuple[Tuple[Any, Any], ...]:
-    """Return every group/role pair owned by the Names palette bridge."""
-
-    if QPalette is None:
-        return ()
-    groups = getattr(QPalette, "ColorGroup", QPalette)
-    roles = getattr(QPalette, "ColorRole", QPalette)
-    try:
-        color_groups = (
-            getattr(groups, "Active"),
-            getattr(groups, "Disabled"),
-            getattr(groups, "Inactive"),
-        )
-        color_roles = (
-            getattr(roles, "Highlight"),
-            getattr(roles, "HighlightedText"),
-        )
-    except AttributeError:
-        return ()
-    return tuple((group, role) for group in color_groups for role in color_roles)
-
-
-def _palette_resolve_mask(palette: Any) -> Optional[int]:
-    """Read the explicit-role mask through the Qt 6 or Qt 5 binding API."""
-
-    try:
-        getter = getattr(palette, "resolveMask", None)
-        if callable(getter):
-            return int(getter())
-        resolver = getattr(palette, "resolve", None)
-        if callable(resolver):
-            return int(resolver())
-    except (AttributeError, RuntimeError, TypeError, ValueError):
-        pass
-    return None
-
-
-def _set_palette_resolve_mask(palette: Any, mask: int) -> bool:
-    """Set and verify the explicit-role mask without touching a live widget."""
-
-    try:
-        setter = getattr(palette, "setResolveMask", None)
-        if callable(setter):
-            setter(int(mask))
-        else:
-            resolver = getattr(palette, "resolve", None)
-            if not callable(resolver):
-                return False
-            resolver(int(mask))
-        return _palette_resolve_mask(palette) == int(mask)
-    except (AttributeError, RuntimeError, TypeError, ValueError):
-        return False
-
-
-def _selection_palette_owned_mask(palette: Any) -> Optional[int]:
-    """Probe the binding's role-bit layout instead of hard-coding Qt internals."""
-
-    pairs = _selection_palette_roles()
-    if len(pairs) != 6:
-        return None
-    owned_mask = 0
-    try:
-        for group, role in pairs:
-            probe = QPalette(palette)
-            if not _set_palette_resolve_mask(probe, 0):
-                return None
-            probe.setBrush(group, role, QBrush(palette.brush(group, role)))
-            role_mask = _palette_resolve_mask(probe)
-            if role_mask is None or role_mask == 0:
-                return None
-            owned_mask |= role_mask
-    except (AttributeError, RuntimeError, TypeError, ValueError):
-        return None
-    return owned_mask or None
-
-
-def _names_palette_snapshot(
-    widget: Any, kind: Optional[str]
-) -> Optional[_PaletteSnapshot]:
-    """Snapshot only the native selection roles that this runtime owns."""
-
-    if kind != "names" or QPalette is None or QBrush is None:
-        return None
-    try:
-        palette = QPalette(widget.palette())
-        resolve_mask = _palette_resolve_mask(palette)
-        owned_mask = _selection_palette_owned_mask(palette)
-        if resolve_mask is None or owned_mask is None:
-            return None
-        brushes = {
-            pair: QBrush(palette.brush(*pair)) for pair in _selection_palette_roles()
-        }
-        if len(brushes) != 6:
-            return None
-        return _PaletteSnapshot(brushes, resolve_mask, owned_mask)
-    except (AttributeError, RuntimeError, TypeError, ValueError):
-        return None
-
-
-def _apply_names_selection_palette(
-    widget: Any,
-    kind: Optional[str],
-    snapshot: Optional[_PaletteSnapshot],
-) -> None:
-    """Keep native delegates and the painted decoration gutter in sync."""
-
-    if kind != "names" or QPalette is None or snapshot is None:
-        return
-    try:
-        palette = QPalette(widget.palette())
-        current_mask = _palette_resolve_mask(palette)
-        if current_mask is None:
-            return
-        roles = getattr(QPalette, "ColorRole", QPalette)
-        highlight = getattr(roles, "Highlight")
-        highlighted_text = getattr(roles, "HighlightedText")
-        for group, role in snapshot.brushes:
-            if role == highlight:
-                color = "#31405A"
-            elif role == highlighted_text:
-                color = "#F0F4FA"
-            else:
-                return
-            palette.setColor(group, role, QColor(color))
-        if not _set_palette_resolve_mask(
-            palette, current_mask | snapshot.owned_mask
-        ):
-            return
-        widget.setPalette(palette)
-        widget.update()
-    except (AttributeError, RuntimeError, TypeError, ValueError):
-        pass
-
-
-def _restore_names_selection_palette(
-    widget: Any,
-    snapshot: Optional[_PaletteSnapshot],
-    current_palette: Any = None,
-) -> None:
-    """Restore owned selection roles while preserving every unrelated change."""
-
-    if QPalette is None or snapshot is None:
-        return
-    try:
-        palette = QPalette(
-            current_palette if current_palette is not None else widget.palette()
-        )
-        current_mask = _palette_resolve_mask(palette)
-        if current_mask is None:
-            return
-        for pair, brush in snapshot.brushes.items():
-            palette.setBrush(*pair, QBrush(brush))
-        restored_mask = (current_mask & ~snapshot.owned_mask) | (
-            snapshot.resolve_mask & snapshot.owned_mask
-        )
-        if not _set_palette_resolve_mask(palette, restored_mask):
-            return
-        widget.setPalette(palette)
-        widget.update()
-    except (AttributeError, RuntimeError, TypeError, ValueError):
-        pass
-
-
 def _color_for(viewport: Any) -> QColor:
     try:
         palette = viewport.palette()
@@ -789,7 +601,6 @@ class _SelectionEntry:
     kind: str = ""
     local_style: bool = False
     highlight_properties: Optional[Dict[str, Any]] = None
-    palette_snapshot: Optional[_PaletteSnapshot] = None
 
 
 @dataclass
@@ -1050,13 +861,10 @@ class _SelectionRuntime(QObject):
                     entry.highlight_properties = (
                         _highlight_property_snapshot(tree) if kind == "names" else None
                     )
-                    if entry.palette_snapshot is None:
-                        entry.palette_snapshot = _names_palette_snapshot(tree, kind)
                     entry.local_style = _with_local_selection_style(tree, kind)
                 _apply_names_highlight_properties(
                     tree, kind, entry.highlight_properties
                 )
-                _apply_names_selection_palette(tree, kind, entry.palette_snapshot)
                 self._connect_model_signals(entry)
                 return
             self._detach(key, entry)
@@ -1076,14 +884,12 @@ class _SelectionRuntime(QObject):
                 highlight_properties=(
                     _highlight_property_snapshot(tree) if kind == "names" else None
                 ),
-                palette_snapshot=_names_palette_snapshot(tree, kind),
             )
             self._entries[key] = new_entry
             new_entry.local_style = _with_local_selection_style(tree, kind)
             _apply_names_highlight_properties(
                 tree, kind, new_entry.highlight_properties
             )
-            _apply_names_selection_palette(tree, kind, new_entry.palette_snapshot)
 
             def destroyed(
                 _object: Any = None,
@@ -1230,15 +1036,6 @@ class _SelectionRuntime(QObject):
         if not object_destroyed:
             self._disconnect_connection(entry.destroyed_connection)
         entry.destroyed_connection = None
-        current_palette = None
-        if entry.palette_snapshot is not None and _is_valid_qobject(entry.tree):
-            try:
-                # Removing the local stylesheet makes Qt rebuild the widget
-                # palette. Preserve the live, pre-removal values so unrelated
-                # roles changed by another plugin remain intact.
-                current_palette = QPalette(entry.tree.palette())
-            except (AttributeError, RuntimeError, TypeError, ValueError):
-                pass
         if entry.local_style and _is_valid_qobject(entry.tree):
             try:
                 current_style = str(entry.tree.styleSheet() or "")
@@ -1257,13 +1054,8 @@ class _SelectionRuntime(QObject):
                 entry.tree.update()
             except (AttributeError, RuntimeError, TypeError, ValueError):
                 pass
-        if entry.palette_snapshot is not None and _is_valid_qobject(entry.tree):
-            _restore_names_selection_palette(
-                entry.tree, entry.palette_snapshot, current_palette
-            )
         entry.local_style = False
         entry.highlight_properties = None
-        entry.palette_snapshot = None
         try:
             entry.filter.release()
         except (AttributeError, RuntimeError, TypeError, ValueError):

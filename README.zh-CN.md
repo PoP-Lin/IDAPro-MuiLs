@@ -93,6 +93,9 @@ ida_modern_ui/
 - `Ctrl+Alt+Shift+M`：打开带实时预览的设置窗口。
 - `Edit > IDAPro-MuiLs Settings...`：通过菜单打开设置窗口。
 
+若其他插件（例如 IDA MCP）也使用 `Ctrl+Alt+M`，请通过
+`Edit > Plugins > IDAPro-MuiLs: Toggle` 切换主题，或在 IDA 中重新分配快捷键。
+
 ## 插件面板集成
 
 兼容的 Dock 内容根节点会被自动识别。插件也可以显式注册，并为子控件设置语义角色：

@@ -101,6 +101,9 @@ preferences are no longer needed.
 - `Ctrl+Alt+Shift+M`: open settings with live preview.
 - `Edit > IDAPro-MuiLs Settings...`: open settings from the menu.
 
+If another plugin uses `Ctrl+Alt+M` (for example, IDA MCP), use
+`Edit > Plugins > IDAPro-MuiLs: Toggle` or assign a distinct shortcut in IDA.
+
 ## Plugin panel integration
 
 Compatible dock-content roots are detected automatically. A plugin can opt in
