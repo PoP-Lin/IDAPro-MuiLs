@@ -57,6 +57,8 @@ _NAMES_HIGHLIGHT_COLORS = {
 _NAMES_LOCAL_STYLE = """
 QTreeView {
     show-decoration-selected: 1;
+    selection-background-color: #31405A;
+    selection-color: #F0F4FA;
     qproperty-highlight_bg_default: #0F141B;
     qproperty-highlight_bg_selected: #31405A;
 }
