@@ -15,7 +15,11 @@ timer, HWND subclass, or per-frame Python callback here.
 from __future__ import annotations
 
 import ctypes
-from ctypes import wintypes
+
+try:
+    from ctypes import wintypes
+except (ImportError, ValueError):  # non-Windows builds without wintypes
+    wintypes = None
 import os
 import sys
 import weakref

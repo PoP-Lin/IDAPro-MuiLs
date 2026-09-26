@@ -1,13 +1,11 @@
 {
   "theme": "modern_dark",
   "enabled": true,
-  "font_family": "Segoe UI",
-  "font_size": 10,
-  "code_font_family": "Cascadia Mono",
   "accent": "#7aa2f7",
   "corner_radius": 10,
   "density": "comfortable",
   "smooth_resize": true,
   "style_plugin_panels": true,
-  "panel_layout_version": 0
+  "panel_layout_version": 0,
+  "apply_panel_layout": false
 }

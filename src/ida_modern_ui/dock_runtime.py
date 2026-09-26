@@ -12,6 +12,7 @@ from __future__ import annotations
 
 import weakref
 
+from .palette import c as _themed
 from .qt_compat import (
     QAbstractButton,
     QApplication,
@@ -127,7 +128,7 @@ def _valid_guide_size(widget):
 
 
 def _color(value, alpha=None):
-    color = QColor(value)
+    color = QColor(_themed(value) if isinstance(value, str) else value)
     if not color.isValid():
         color = QColor("#82AAFF")
     if alpha is not None:

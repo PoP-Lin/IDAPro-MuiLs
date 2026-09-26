@@ -36,6 +36,7 @@ except ImportError:  # pragma: no cover - Qt 5 IDA builds
         QColor = QPaintEvent = QPainter = None  # type: ignore[assignment]
         QPainterPath = QPalette = QPen = None  # type: ignore[assignment]
 
+from . import palette as _palette
 from .qt_compat import qobject_key, same_qobject
 
 
@@ -295,7 +296,7 @@ def _with_local_selection_style(widget: Any, kind: Optional[str]) -> bool:
         current = str(widget.styleSheet() or "")
         if _LOCAL_STYLE_BEGIN in current:
             return True
-        block = f"{_LOCAL_STYLE_BEGIN}\n{_NAMES_LOCAL_STYLE}\n{_LOCAL_STYLE_END}"
+        block = f"{_LOCAL_STYLE_BEGIN}\n{_palette.transform_text(_NAMES_LOCAL_STYLE)}\n{_LOCAL_STYLE_END}"
         widget.setStyleSheet(f"{current.rstrip()}\n{block}\n" if current else f"{block}\n")
         return True
     except (AttributeError, RuntimeError, TypeError, ValueError):
@@ -343,7 +344,7 @@ def _apply_names_highlight_properties(
         if name not in original:
             continue
         try:
-            changed = bool(widget.setProperty(name, QColor(color))) or changed
+            changed = bool(widget.setProperty(name, QColor(_palette.c(color)))) or changed
         except (AttributeError, RuntimeError, TypeError, ValueError):
             continue
     if changed:
@@ -366,7 +367,7 @@ def _color_for(viewport: Any) -> QColor:
                 return QColor(color)
     except (AttributeError, RuntimeError, TypeError, ValueError):
         pass
-    return QColor(_BACKGROUND)
+    return QColor(_palette.c(_BACKGROUND))
 
 
 def _selected_color(tree: Any, viewport: Any) -> QColor:
@@ -1139,7 +1140,7 @@ class _SelectionRuntime(QObject):
 
                 # A very quiet outline improves the anti-aliased edge on dark
                 # themes without turning the selection into a bright border.
-                edge = QColor(_SELECTION_EDGE)
+                edge = QColor(_palette.c(_SELECTION_EDGE))
                 edge.setAlpha(105)
                 painter.setBrush(_NO_BRUSH if _NO_BRUSH is not None else background)
                 painter.setPen(QPen(edge, 1.0))

@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+from .palette import c as _themed
 from .qt_compat import QApplication, QColor, QWidget
 
 
@@ -112,7 +113,7 @@ def apply_analysis_palette(root=None):
             for property_name, color in properties.items():
                 try:
                     if meta.indexOfProperty(property_name) >= 0:
-                        widget.setProperty(property_name, QColor(color))
+                        widget.setProperty(property_name, QColor(_themed(color)))
                 except (AttributeError, RuntimeError, TypeError, ValueError):
                     continue
             widget.update()

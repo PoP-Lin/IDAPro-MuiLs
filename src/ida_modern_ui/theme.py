@@ -3,7 +3,11 @@
 
 from __future__ import annotations
 
+import gc
+import sys
 from pathlib import Path
+
+from . import palette
 
 from .dock_runtime import (
     apply_dock_runtime,
@@ -36,7 +40,7 @@ from .popup_runtime import (
     refresh_popup_runtime,
     restore_popup_runtime,
 )
-from .qt_compat import QApplication, QFontDatabase
+from .qt_compat import QApplication, QEvent, QFontDatabase
 from .resize_runtime import (
     apply_resize_runtime,
     refresh_resize_window,
@@ -56,6 +60,22 @@ from .scrollbar_runtime import (
 THEMES_DIR = Path(__file__).resolve().parent / "themes"
 STYLE_BEGIN = "/* BEGIN IDA Modern UI */"
 STYLE_END = "/* END IDA Modern UI */"
+STYLE_SEPARATOR = "\n\n"
+
+IS_MACOS = sys.platform == "darwin"
+CODE_FONT_FALLBACKS = (
+    ("SF Mono", "Menlo", "JetBrainsMono Nerd Font Mono", "Monaco", "Courier New")
+    if IS_MACOS
+    else ("Cascadia Mono", "Consolas", "Courier New")
+)
+INTERFACE_FONT_FALLBACKS = (
+    (".AppleSystemUIFont", "Helvetica Neue", "Helvetica", "Arial")
+    if IS_MACOS
+    else ("Segoe UI Variable", "Segoe UI", "Arial")
+)
+# Every theme renders from the authored dark stylesheet; palette.py derives
+# the variants at apply time so the QSS and the Python runtimes never drift.
+THEME_SOURCE = {"modern_dark": "modern_dark", "modern_oled": "modern_dark"}
 
 DENSITY = {
     "compact": {"control_v": 3, "control_h": 7, "tab_v": 4, "tab_h": 8, "item": 2},
@@ -78,16 +98,12 @@ class ThemeManager:
         # theme or third-party QSS change made while the plugin is enabled.
         self._original_stylesheet = native_qss
 
-        qss_path = THEMES_DIR / f"{config['theme']}.qss"
-        qss = qss_path.read_text(encoding="utf-8")
-        code_font = self._available_font(
-            config["code_font_family"],
-            ("Cascadia Mono", "Consolas", "Courier New"),
-        )
-        interface_font = self._available_font(
-            config["font_family"],
-            ("Segoe UI Variable", "Segoe UI", "Arial"),
-        )
+        theme_name = config["theme"]
+        palette.set_theme(theme_name)
+        qss_path = THEMES_DIR / f"{THEME_SOURCE.get(theme_name, 'modern_dark')}.qss"
+        qss = palette.transform_text(qss_path.read_text(encoding="utf-8"))
+        code_font = self._available_font(config["code_font_family"], CODE_FONT_FALLBACKS)
+        interface_font = self._available_font(config["font_family"], INTERFACE_FONT_FALLBACKS)
         corner_radius = int(config["corner_radius"])
         panel_radius = 0 if corner_radius <= 0 else min(16, corner_radius + 2)
         panel_inner_radius = (
@@ -128,8 +144,10 @@ class ThemeManager:
         # viewers (disassembly, pseudocode, graph and output). Replacing it
         # makes those widgets fall back to bright defaults, so always layer our
         # visual rules on top of the native theme instead.
+        # Keep the native stylesheet byte-for-byte so restore() returns IDA to
+        # exactly the string it had before the theme was applied.
         themed_stylesheet = (
-            f"{native_qss.rstrip()}\n\n{STYLE_BEGIN}\n{qss.rstrip()}\n{STYLE_END}\n"
+            f"{native_qss}{STYLE_SEPARATOR}{STYLE_BEGIN}\n{qss.rstrip()}\n{STYLE_END}\n"
         )
         if current_stylesheet != themed_stylesheet:
             app.setStyleSheet(themed_stylesheet)
@@ -182,8 +200,14 @@ class ThemeManager:
                 # Leave an externally edited/incomplete block untouched rather
                 # than deleting unrelated rules after a missing end marker.
                 break
-            value = value[:start] + value[end + len(STYLE_END):]
-        return value.rstrip()
+            head = value[:start]
+            if head.endswith(STYLE_SEPARATOR):
+                head = head[: -len(STYLE_SEPARATOR)]
+            tail = value[end + len(STYLE_END):]
+            if tail.startswith("\n"):
+                tail = tail[1:]
+            value = head + tail
+        return value
 
     def restore(self) -> None:
         self.enabled = False
@@ -203,6 +227,28 @@ class ThemeManager:
                 app.setStyleSheet(restored_stylesheet)
                 repolish_analysis_widgets()
         restore_native_appearance()
+        palette.set_theme("modern_dark")
+
+    def shutdown(self) -> None:
+        """Restore, then destroy every Python-owned Qt object synchronously.
+
+        IDA 9.4 on macOS (PySide 6.8, Python 3.14) crashes at exit if a
+        PySide wrapper is still parented to a native widget, or a deferred
+        delete is still queued, when the interpreter is finalised.  Flushing
+        here, while Python is alive, keeps IDA's shutdown clean.
+        """
+        self.restore()
+        app = QApplication.instance()
+        if app is None:
+            return
+        try:
+            deferred = getattr(getattr(QEvent, "Type", QEvent), "DeferredDelete")
+            app.sendPostedEvents(None, deferred)
+            app.processEvents()
+            app.sendPostedEvents(None, deferred)
+        except (AttributeError, RuntimeError, TypeError):
+            pass
+        gc.collect()
 
     def refresh_ida_widget(self, widget):
         if self.enabled and widget is not None:

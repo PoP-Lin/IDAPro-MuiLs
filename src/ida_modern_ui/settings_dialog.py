@@ -3,6 +3,8 @@
 
 from __future__ import annotations
 
+import sys
+
 from .config import DEFAULT_CONFIG
 from .qt_compat import (
     QCheckBox,
@@ -43,6 +45,12 @@ class SettingsDialog(QDialog):
         )
         self.theme = QComboBox()
         self.theme.addItem("Modern Dark", "modern_dark")
+        self.theme.addItem("Modern OLED (true black)", "modern_oled")
+        self.apply_panel_layout = QCheckBox("Apply balanced panel layout (rewrites saved desktop)")
+        self.apply_panel_layout.setToolTip(
+            "One-time splitter and column sizing of the built-in Functions, "
+            "Output, Strings and Names panels. Off keeps your desktop untouched."
+        )
         self.accent = QLineEdit()
         self.accent.setMaxLength(7)
         accent_button = QPushButton("Choose...")
@@ -72,7 +80,11 @@ class SettingsDialog(QDialog):
         form.setHorizontalSpacing(14)
         form.setVerticalSpacing(5)
         form.addRow(self.enabled)
-        form.addRow(self.smooth_resize)
+        if sys.platform == "win32":
+            form.addRow(self.smooth_resize)
+        else:
+            self.smooth_resize.hide()
+        form.addRow(self.apply_panel_layout)
         form.addRow("Theme", self.theme)
         form.addRow("Accent", accent_row)
         form.addRow("Interface font", self.font_family)
@@ -120,6 +132,7 @@ class SettingsDialog(QDialog):
             self.enabled,
             self.smooth_resize,
             self.style_plugin_panels,
+            self.apply_panel_layout,
             self.theme,
             self.accent,
             self.font_family,
@@ -142,6 +155,7 @@ class SettingsDialog(QDialog):
         self.enabled.setChecked(config["enabled"])
         self.smooth_resize.setChecked(config["smooth_resize"])
         self.style_plugin_panels.setChecked(config["style_plugin_panels"])
+        self.apply_panel_layout.setChecked(config.get("apply_panel_layout", False))
         self.theme.setCurrentIndex(max(0, self.theme.findData(config["theme"])))
         self.accent.setText(config["accent"])
         self.font_family.setText(config["font_family"])
@@ -155,6 +169,7 @@ class SettingsDialog(QDialog):
             "enabled": self.enabled.isChecked(),
             "smooth_resize": self.smooth_resize.isChecked(),
             "style_plugin_panels": self.style_plugin_panels.isChecked(),
+            "apply_panel_layout": self.apply_panel_layout.isChecked(),
             "theme": self.theme.currentData(),
             "accent": self.accent.text(),
             "font_family": self.font_family.text().strip() or DEFAULT_CONFIG["font_family"],

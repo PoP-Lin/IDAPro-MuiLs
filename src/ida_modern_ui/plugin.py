@@ -114,7 +114,7 @@ class ModernUIPlugin(ida_idaapi.plugin_t):
         ida_kernwin.detach_action_from_menu("Edit/IDAPro-MuiLs Settings...", ACTION_SETTINGS)
         ida_kernwin.unregister_action(ACTION_SETTINGS)
         self._settings_action = None
-        self._theme.restore()
+        self._theme.shutdown()
 
     def on_ui_ready(self):
         self._layout_gate_open = True
@@ -125,7 +125,8 @@ class ModernUIPlugin(ida_idaapi.plugin_t):
         # Apply built-in chooser/tree column widths only after the restored
         # desktop is visible.  Per-header guards make this idempotent and keep
         # user-adjusted widths intact; no resize/paint path is involved.
-        apply_builtin_column_layout()
+        if self._layout_enabled():
+            apply_builtin_column_layout()
 
         diagnostics = dock_runtime_diagnostics()
         if not self._ready_rescan_done:
@@ -154,7 +155,7 @@ class ModernUIPlugin(ida_idaapi.plugin_t):
         # A hidden built-in panel may be constructed after ready_to_run.  Scan
         # only this newly visible subtree so the deferred column polish does
         # not touch plugin panels or enter a hot path.
-        if qt_widget is not None:
+        if qt_widget is not None and self._layout_enabled():
             apply_builtin_column_layout(qt_widget)
         # widget_visible can fire while IDA is still constructing/restoring a
         # desktop.  Refresh its appearance immediately, but do not persist a
@@ -177,7 +178,11 @@ class ModernUIPlugin(ida_idaapi.plugin_t):
             self._config = save_config(self._config)
             self._layout_migration_origin_version = None
         self._maybe_migrate_panel_layout()
-        apply_builtin_column_layout()
+        if self._layout_enabled():
+            apply_builtin_column_layout()
+
+    def _layout_enabled(self):
+        return bool(self._theme.enabled and self._config.get("apply_panel_layout", False))
 
     def on_finish_populating_widget_popup(self, widget, popup):
         if not self._theme.enabled:
@@ -190,7 +195,7 @@ class ModernUIPlugin(ida_idaapi.plugin_t):
         self._theme.refresh_ida_popup(owner, popup)
 
     def _maybe_migrate_panel_layout(self):
-        if not self._theme.enabled or self._layout_migration_active:
+        if not self._layout_enabled() or self._layout_migration_active:
             return
         self._layout_migration_active = True
         try:

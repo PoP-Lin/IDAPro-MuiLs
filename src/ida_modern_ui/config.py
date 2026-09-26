@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from copy import deepcopy
 from pathlib import Path
 
@@ -15,17 +16,25 @@ PACKAGE_CONFIG_PATH = PACKAGE_DIR / "config.json"
 CONFIG_DIR = Path(ida_diskio.get_user_idadir()) / "modern_ui"
 CONFIG_PATH = CONFIG_DIR / "config.json"
 
+IS_MACOS = sys.platform == "darwin"
+IS_WINDOWS = sys.platform == "win32"
+
+THEMES = ("modern_dark", "modern_oled")
+
 DEFAULT_CONFIG = {
     "enabled": True,
     "theme": "modern_dark",
     "accent": "#7AA2F7",
-    "font_family": "Segoe UI",
-    "font_size": 10,
-    "code_font_family": "Cascadia Mono",
+    "font_family": "Helvetica Neue" if IS_MACOS else "Segoe UI",
+    "font_size": 11 if IS_MACOS else 10,
+    "code_font_family": "SF Mono" if IS_MACOS else "Cascadia Mono",
     "corner_radius": 10,
     "density": "comfortable",
     "smooth_resize": True,
     "style_plugin_panels": True,
+    # The balanced splitter/column layout rewrites the saved IDA desktop.  It
+    # is opt-in outside Windows so enabling the theme changes pixels only.
+    "apply_panel_layout": IS_WINDOWS,
     "panel_layout_version": 0,
 }
 
@@ -57,6 +66,9 @@ def normalize_config(config: dict) -> dict:
     normalized["style_plugin_panels"] = _as_bool(
         normalized["style_plugin_panels"], DEFAULT_CONFIG["style_plugin_panels"]
     )
+    normalized["apply_panel_layout"] = _as_bool(
+        normalized["apply_panel_layout"], DEFAULT_CONFIG["apply_panel_layout"]
+    )
     normalized["font_size"] = _bounded_int(
         normalized["font_size"], 8, 16, DEFAULT_CONFIG["font_size"]
     )
@@ -73,7 +85,7 @@ def normalize_config(config: dict) -> dict:
         normalized["density"] if normalized["density"] in {"compact", "comfortable"} else "comfortable"
     )
     normalized["theme"] = (
-        normalized["theme"] if normalized["theme"] in {"modern_dark"} else "modern_dark"
+        normalized["theme"] if normalized["theme"] in THEMES else "modern_dark"
     )
     accent = str(normalized["accent"]).upper()
     normalized["accent"] = accent if re.fullmatch(r"#[0-9A-F]{6}", accent) else "#7AA2F7"
