@@ -23,7 +23,7 @@ THEMES = ("modern_dark", "modern_oled")
 
 DEFAULT_CONFIG = {
     "enabled": True,
-    "theme": "modern_dark",
+    "theme": "modern_oled" if IS_MACOS else "modern_dark",
     "accent": "#7AA2F7",
     "font_family": "Helvetica Neue" if IS_MACOS else "Segoe UI",
     "font_size": 11 if IS_MACOS else 10,
@@ -35,6 +35,8 @@ DEFAULT_CONFIG = {
     # The balanced splitter/column layout rewrites the saved IDA desktop.  It
     # is opt-in outside Windows so enabling the theme changes pixels only.
     "apply_panel_layout": IS_WINDOWS,
+    # Print runtime diagnostics to the Output window at init/ready.
+    "verbose_log": False,
     "panel_layout_version": 0,
 }
 
@@ -65,6 +67,9 @@ def normalize_config(config: dict) -> dict:
     )
     normalized["style_plugin_panels"] = _as_bool(
         normalized["style_plugin_panels"], DEFAULT_CONFIG["style_plugin_panels"]
+    )
+    normalized["verbose_log"] = _as_bool(
+        normalized["verbose_log"], DEFAULT_CONFIG["verbose_log"]
     )
     normalized["apply_panel_layout"] = _as_bool(
         normalized["apply_panel_layout"], DEFAULT_CONFIG["apply_panel_layout"]

@@ -1,5 +1,4 @@
 {
-  "theme": "modern_dark",
   "enabled": true,
   "accent": "#7aa2f7",
   "corner_radius": 10,
@@ -7,5 +6,6 @@
   "smooth_resize": true,
   "style_plugin_panels": true,
   "panel_layout_version": 0,
-  "apply_panel_layout": false
+  "apply_panel_layout": false,
+  "verbose_log": false
 }

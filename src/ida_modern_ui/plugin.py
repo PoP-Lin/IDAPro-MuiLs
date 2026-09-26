@@ -99,7 +99,8 @@ class ModernUIPlugin(ida_idaapi.plugin_t):
         # inventory; ordinary startup receives one additional ready scan below.
         self._apply_saved_state()
         self._set_runtime_marker()
-        self._report_runtime("init")
+        if self._config.get("verbose_log"):
+            self._report_runtime("init")
         return ida_idaapi.PLUGIN_KEEP
 
     def run(self, arg):
@@ -141,7 +142,8 @@ class ModernUIPlugin(ida_idaapi.plugin_t):
         self._set_runtime_marker()
         if not self._ready_reported:
             self._ready_reported = True
-            self._report_runtime("ready", diagnostics)
+            if self._config.get("verbose_log"):
+                self._report_runtime("ready", diagnostics)
 
     def on_widget_visible(self, widget):
         if not self._theme.enabled:

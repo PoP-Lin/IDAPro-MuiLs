@@ -12,7 +12,8 @@ corners via DWM) are no-ops here; everything else works unchanged.
   Font Mono`). Font size defaults to 11 pt.
 - **Modern OLED theme**: a second theme derived from Modern Dark where every
   dark surface is pushed to true black (`#000000`) for OLED panels. Mid-tones,
-  text and accent colours keep their hue. Select it in the settings dialog.
+  text and accent colours keep their hue. It is the default on macOS; switch
+  back to Modern Dark in the settings dialog if preferred.
 - **Desktop layout is opt-in**: the "balanced panel layout" and built-in
   column sizing rewrite IDA's saved desktop. They are off by default on macOS
   so enabling the theme changes pixels only. Turn them on in settings if
@@ -23,6 +24,11 @@ corners via DWM) are no-ops here; everything else works unchanged.
   synchronously in `term()` and cancels its own timers.
 - **Exact restore**: disabling the theme returns `QApplication.styleSheet()`
   to the byte-identical string IDA had before, not a whitespace-trimmed copy.
+
+- **Quiet startup**: the runtime diagnostics lines are off by default; set
+  `"verbose_log": true` in `~/.idapro/modern_ui/config.json` to see them.
+  The `PySide has not been widely tested on Python >= 3.14` line is printed
+  by IDA itself about its bundled Python and is unrelated to the theme.
 
 ## Install (does not touch the IDA .app bundle)
 
