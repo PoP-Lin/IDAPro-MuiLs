@@ -6,6 +6,30 @@ project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- macOS support for IDA 9.4 (PySide6 6.8 / Qt 6.8, bundled Python 3.14) with
+  platform font defaults (`Helvetica Neue`, `SF Mono`, `Menlo` fallbacks).
+- `Modern OLED` theme: a true-black variant derived from `Modern Dark` at
+  apply time; all Python paint runtimes share the derived palette.
+- `muils.py`, a stdlib-only manager (`install`, `uninstall
+  [--restore-backup]`, `status`, `enable`, `disable`, `theme`) that targets the
+  per-user IDA plugin directory on Windows, macOS, and Linux with timestamped
+  backups.
+- `apply_panel_layout` setting; the balanced desktop layout and built-in
+  column sizing are opt-in outside Windows.
+- `verbose_log` setting; runtime diagnostics are no longer printed by default.
+
+### Fixed
+
+- IDA 9.4/macOS aborted (`recursive_mutex lock failed`) or segfaulted at exit
+  when PySide-owned overlays, event filters, or `QTimer.singleShot` callbacks
+  outlived interpreter finalisation. `term()` now restores, flushes deferred
+  deletes, and cancels owned timers.
+- Disabling the theme restores the byte-identical native stylesheet.
+- The loader no longer raises during IDA startup when the package cannot be
+  imported; it registers a skipped plugin and logs to `modern_ui/startup.log`.
+
 ## [1.0.0] - 2026-09-19
 
 ### Added
