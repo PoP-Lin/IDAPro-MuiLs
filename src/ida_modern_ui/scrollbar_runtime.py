@@ -15,6 +15,8 @@ small local event filter (resize/show/style/mouse events for that scrollbar).
 
 from __future__ import annotations
 
+from .palette import c as _themed
+
 from dataclasses import dataclass
 from typing import Any, Dict, Iterable, Tuple
 
@@ -206,7 +208,7 @@ def _background_for(bar: Any) -> str:
                     return rgb
     except (AttributeError, RuntimeError, TypeError, ValueError):
         pass
-    return _DEFAULT_TRACK
+    return _themed(_DEFAULT_TRACK)
 
 
 def _subcontrol_rect(bar: Any) -> Any:
@@ -241,12 +243,12 @@ class _RoundedScrollbarOverlay(QWidget):
     def __init__(self, bar: Any, track_color: str = _DEFAULT_TRACK):
         super().__init__(bar)
         self._bar = bar
-        self._track_color = QColor(track_color)
-        self._rail_color = QColor(_DEFAULT_RAIL)
-        self._handle_color = QColor(_DEFAULT_HANDLE)
-        self._hover_color = QColor(_HOVER_HANDLE)
-        self._pressed_color = QColor(_PRESSED_HANDLE)
-        self._disabled_color = QColor(_DISABLED_HANDLE)
+        self._track_color = QColor(_themed(track_color))
+        self._rail_color = QColor(_themed(_DEFAULT_RAIL))
+        self._handle_color = QColor(_themed(_DEFAULT_HANDLE))
+        self._hover_color = QColor(_themed(_HOVER_HANDLE))
+        self._pressed_color = QColor(_themed(_PRESSED_HANDLE))
+        self._disabled_color = QColor(_themed(_DISABLED_HANDLE))
         try:
             self.setObjectName(_OVERLAY_MARKER)
             self.setProperty(_OVERLAY_MARKER, True)

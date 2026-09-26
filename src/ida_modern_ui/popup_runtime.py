@@ -14,7 +14,7 @@ import ctypes
 import os
 import sys
 from dataclasses import dataclass, field
-from typing import Any, Dict, Iterable, Optional
+from typing import List, Any, Dict, Iterable, Optional
 
 from .qt_compat import (
     QApplication,
@@ -302,6 +302,38 @@ class _PopupRuntime:
         self._mask_apply_count = 0
         self._plugin_skip_count = 0
         self._menubar_hover_count = 0
+        self._timers: List[Any] = []
+
+    def _later(self, msec: int, callback) -> None:
+        """Owned single-shot timer that restore() can cancel.
+
+        ``QTimer.singleShot(msec, callable)`` leaves a PySide-owned timer that
+        segfaults IDA 9.4/macOS if the interpreter finalises before it fires.
+        """
+        timer = QTimer()
+        timer.setSingleShot(True)
+        timer.setInterval(max(0, int(msec)))
+        timers = self._timers
+
+        def fire():
+            try:
+                timers.remove(timer)
+            except ValueError:
+                pass
+            callback()
+
+        timer.timeout.connect(fire)
+        timers.append(timer)
+        timer.start()
+
+    def _cancel_timers(self) -> None:
+        for timer in list(self._timers):
+            try:
+                timer.stop()
+                timer.timeout.disconnect()
+            except (AttributeError, RuntimeError, TypeError):
+                pass
+        self._timers.clear()
 
     def apply(self, corner_radius: int) -> None:
         radius = max(0, int(corner_radius or 0))
@@ -320,8 +352,8 @@ class _PopupRuntime:
         # top-level inventory.  One event-loop callback catches that startup
         # boundary and only connects menu lifecycle signals; hidden menus stay
         # native-window-free until aboutToShow.
-        QTimer.singleShot(0, self._refresh_main_menus_after_apply)
-        QTimer.singleShot(750, self._refresh_main_menus_after_apply)
+        self._later(0, self._refresh_main_menus_after_apply)
+        self._later(750, self._refresh_main_menus_after_apply)
 
     def refresh(self, owner: Any = None, popup_handle: Any = None) -> int:
         if not self._enabled or not self._radius:
@@ -344,11 +376,12 @@ class _PopupRuntime:
         # IdaMenu meta-class.  This is one local lifecycle callback, not a
         # polling timer or an application event filter.
         if popup_handle is not None:
-            QTimer.singleShot(0, self._refresh_visible_after_popup)
+            self._later(0, self._refresh_visible_after_popup)
         return registered
 
     def restore(self) -> None:
         self._enabled = False
+        self._cancel_timers()
         self._restore_entries()
         self._restore_menu_bars()
         self._radius = 0
@@ -481,7 +514,7 @@ class _PopupRuntime:
             return
         self._before_show_count += 1
         self._decorate(entry, prefer_size_hint=True)
-        QTimer.singleShot(0, lambda entry_key=key: self._after_show(entry_key))
+        self._later(0, lambda entry_key=key: self._after_show(entry_key))
 
     def _after_show(self, key: Any) -> None:
         if not self._enabled:

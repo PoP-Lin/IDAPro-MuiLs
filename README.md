@@ -41,6 +41,27 @@ This release targets Windows 11. Its native title-bar and resize integrations
 use Windows DWM APIs; Linux and macOS are not supported targets. The IDA SDK is
 not required to install or develop this plugin.
 
+## Installation (any platform, one script)
+
+`muils.py` (stdlib only, Python 3.8+) installs into IDA's **per-user** plugin
+directory (`~/.idapro/plugins` on macOS/Linux, `%APPDATA%\Hex-Rays\IDA Pro\plugins`
+on Windows). That directory is shared by every IDA 9.x release on the machine,
+so the IDA install itself is never modified and a future IDA (9.5, ...) picks
+the theme up without reinstalling.
+
+```bash
+python muils.py install                        # backup + copy
+python muils.py status
+python muils.py theme oled                     # or: theme dark
+python muils.py disable                        # keep files, start IDA unthemed
+python muils.py uninstall                      # remove plugin + settings
+python muils.py uninstall --restore-backup     # ...and roll back the latest backup
+```
+
+Every `install` writes `muils-backup-<timestamp>/` into the IDA user directory
+(previous plugin files, previous settings, and `ida.reg` where present) so a
+rollback is always possible. See `docs/MACOS.md` for macOS-specific notes.
+
 ## Installation
 
 ### GitHub release

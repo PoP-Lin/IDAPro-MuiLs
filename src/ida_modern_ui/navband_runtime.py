@@ -36,6 +36,7 @@ except ImportError:  # pragma: no cover - Qt 5 IDA builds
         QPainter = None  # type: ignore[assignment]
         QPainterPath = QPalette = QPen = None  # type: ignore[assignment]
 
+from .palette import c as _themed
 from .qt_compat import qobject_key, same_qobject
 
 
@@ -172,7 +173,7 @@ def _background(widget: Any) -> QColor:
                 return QColor(color)
     except (AttributeError, RuntimeError, TypeError, ValueError):
         pass
-    return QColor(_BACKGROUND_COLOR)
+    return QColor(_themed(_BACKGROUND_COLOR))
 
 
 class _NavbandPaintFilter(QObject):
@@ -262,7 +263,7 @@ class _NavbandPaintFilter(QObject):
             if _ODD_EVEN is not None:
                 outside.setFillRule(_ODD_EVEN)
             painter.fillPath(outside, _background(target))
-            border = QColor(_BORDER_COLOR)
+            border = QColor(_themed(_BORDER_COLOR))
             border.setAlpha(190)
             painter.setBrush(_NO_BRUSH if _NO_BRUSH is not None else border)
             painter.setPen(QPen(border, 1.0))
