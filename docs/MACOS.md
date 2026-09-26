@@ -33,7 +33,8 @@ corners via DWM) are no-ops here; everything else works unchanged.
 ## Install (does not touch the IDA .app bundle)
 
 ```bash
-./scripts/macos/install.sh
+python3 muils.py install     # cross-platform manager (preferred)
+./scripts/macos/install.sh    # shell equivalent
 ```
 
 Copies the loader and package into `~/.idapro/plugins/` and records a
@@ -47,6 +48,7 @@ settings where the OLED theme, fonts, accent and radius are chosen.
 ## Uninstall / full rollback
 
 ```bash
+python3 muils.py uninstall [--restore-backup] [--keep-config]
 ./scripts/macos/uninstall.sh                    # remove plugin + its settings
 ./scripts/macos/uninstall.sh --restore-backup   # ...and restore the latest backup, incl. ida.reg
 ./scripts/macos/uninstall.sh --keep-config      # remove plugin, keep ~/.idapro/modern_ui
